@@ -9,30 +9,32 @@
     * O breakpoint personalizado é definido como 28.5rem (456px).
 */
 @plugin "daisyui/theme" {
-    name: "neukox";
-    default: true;
-    prefersdark: false;
-    color-scheme: light;
+  name: "neukox";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
 
-    --color-base-100: oklch(100% 0% 89.876);
-    --color-base-200: oklch(30.4% 18.25% 281.174);
-    --color-base-300: oklch(54% 29.25% 237.751);
-    --color-primary: oklch(21.3% 9.75% 250.09);
-    --color-secondary: oklch(62.5% 14.25% 227.536);
-    --color-accent: oklch(72.6% 37.5% 234.32);
-    --color-neutral: oklch(98.2% 0% 89.876);
-    --color-info: oklch(77.6% 37.25% 226.595);
-    --color-success: oklch(88.4% 66.75% 138.694);
-    --color-warning: oklch(89.1% 45.75% 104.318);
-    --color-error: oklch(93.3% 49.25% 24.658);
+  --color-base-100: oklch(100% 0% 89.876);
+  --color-base-200: oklch(97% 0% 89.876);
+  --color-base-300: oklch(95% 0% 89.876);
+  --color-gradient-from: oklch(100% 0% 89.876);
+  --color-gradient-to: oklch(100% 0% 89.876);
+  --color-primary: oklch(33.4% 15.25% 234.873);
+  --color-secondary: oklch(54% 29.25% 237.751);
+  --color-accent: oklch(67.1% 37.25% 238.737);
+  --color-neutral: oklch(62.5% 14.25% 227.536);
+  --color-info: oklch(77.6% 37.25% 226.595);
+  --color-success: oklch(81.6% 56.75% 143.335);
+  --color-warning: oklch(91.9% 47.75% 107.691);
+  --color-error: oklch(93.3% 49.25% 24.658);
 }
 
 @theme {
-    --breakpoint-xs: 28.5rem;
+  --breakpoint-xs: 28.5rem;
+  --gradient-1: oklch(30.4% 18.25% 281.174);
+  --gradient-2: oklch(63% 31% 234.92);
 }
 
 h1 {
-    @apply text-4xl font-bold;
+  @apply text-4xl font-bold;
 }
-
-

@@ -63,7 +63,7 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="w-full max-w-[25rem] flex flex-col gap-10 p-8 bg-neutral rounded-xl shadow-xl shadow-gray-700">
+      <div className="w-full max-w-[25rem] flex flex-col gap-10 p-8 bg-base-100 rounded-xl shadow-xl shadow-gray-700">
         <div className="text-center">
           <h1 className="mb-4">Login</h1>
           <p className="font-medium">
