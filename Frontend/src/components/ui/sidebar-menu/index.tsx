@@ -4,38 +4,69 @@ import EmailIcon from "@assets/icons/Email";
 import ProfileIcon from "@assets/icons/Profile";
 import TicketIcon from "@assets/icons/Ticket";
 
-export default function SideBarMenu() {
+export default function SidebarMenu() {
   return (
-    <aside className="w-60 h-full bg-primary text-white font-medium">
-      <ul className="menu w-full p-4 gap-2">
+    <aside className={`w-fit h-full bg-primary text-white font-medium`}>
+      <ul className="menu w-full p-0 md:p-4 md:gap-2">
         <li>
-          <a className="hover:bg-neutral">
+          <div className="tooltip tooltip-right md:hidden" data-tip="Dashboard">
+            <a className="hover:bg-neutral p-2 rounded-sm">
+              <DashboardIcon className="w-6" />
+            </a>
+          </div>
+          <a className="hidden md:flex hover:bg-neutral items-center gap-2">
             <DashboardIcon className="w-6" />
-            Dashboard
+            <span>Dashboard</span>
           </a>
         </li>
         <li>
-          <a href="#about" className="hover:bg-neutral">
+          <div
+            className="tooltip tooltip-right md:hidden"
+            data-tip="Fazer novo chamado"
+          >
+            <a className="hover:bg-neutral p-2 rounded-sm">
+              <TicketIcon className="w-6" />
+            </a>
+          </div>
+          <a className="hidden md:flex hover:bg-neutral items-center gap-2">
             <TicketIcon className="w-6" />
-            Novo chamado
+            <span>Novo chamado</span>
           </a>
         </li>
         <li>
-          <a href="#services" className="hover:bg-neutral">
+          <div className="tooltip tooltip-right md:hidden" data-tip="Email">
+            <a className="hover:bg-neutral p-2 rounded-sm">
+              <EmailIcon className="w-6" />
+            </a>
+          </div>
+          <a className="hidden md:flex hover:bg-neutral items-center gap-2">
             <EmailIcon className="w-6" />
-            Email
+            <span>Email</span>
           </a>
         </li>
         <li>
-          <a href="#contact" className="hover:bg-neutral">
+          <div className="tooltip tooltip-right md:hidden" data-tip="Chat">
+            <a className="hover:bg-neutral p-2 rounded-sm">
+              <ChatIcon className="w-6" />
+            </a>
+          </div>
+          <a className="hidden md:flex hover:bg-neutral items-center gap-2">
             <ChatIcon className="w-6" />
-            Chat
+            <span>Chat</span>
           </a>
         </li>
         <li>
-          <a href="#contact" className="hover:bg-neutral">
+          <div
+            className="tooltip tooltip-right md:hidden"
+            data-tip="Meu perfil"
+          >
+            <a className="hover:bg-neutral p-2 rounded-sm">
+              <ProfileIcon className="w-6" />
+            </a>
+          </div>
+          <a className="hidden md:flex hover:bg-neutral items-center gap-2">
             <ProfileIcon className="w-6" />
-            Perfil
+            <span>Perfil</span>
           </a>
         </li>
       </ul>
