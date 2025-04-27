@@ -26,7 +26,9 @@
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
       "@pages/*": ["pages/*"],
-    },
+      "@types/*": ["types/*"],
+      "@services/*": ["services/*"]
+    }
   },
   "include": ["src"]
 }
