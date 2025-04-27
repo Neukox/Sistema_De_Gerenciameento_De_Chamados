@@ -17,9 +17,9 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen bg-base-100">
       <Header />
-      <div className="flex flex-col items-center justify-center h-screen gap-8">
+      <div className="h-[calc(100vh_-_5rem)] flex flex-col items-center justify-center gap-8">
         <h1>Teste de telas</h1>
         <div className="flex gap-4">
           <ul className="text-center">
@@ -57,7 +57,7 @@ function App() {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
