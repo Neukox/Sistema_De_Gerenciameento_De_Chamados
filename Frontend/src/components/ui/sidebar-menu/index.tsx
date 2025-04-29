@@ -6,10 +6,10 @@ import TicketIcon from "@assets/icons/Ticket";
 
 export default function SidebarMenu() {
   return (
-    <aside className={`w-fit h-full bg-primary text-white font-medium`}>
-      <ul className="menu w-full p-0 md:p-4 md:gap-2">
+    <aside className={`w-fit h-full bg-primary text-white font-medium p-2 md:p-4`}>
+      <ul className="menu w-full p-0 md:gap-2">
         <li>
-          <div className="tooltip tooltip-right md:hidden" data-tip="Dashboard">
+          <div className="tooltip tooltip-right md:hidden p-0" data-tip="Dashboard">
             <a className="hover:bg-neutral p-2 rounded-sm">
               <DashboardIcon className="w-6" />
             </a>
@@ -21,7 +21,7 @@ export default function SidebarMenu() {
         </li>
         <li>
           <div
-            className="tooltip tooltip-right md:hidden"
+            className="tooltip tooltip-right md:hidden p-0"
             data-tip="Fazer novo chamado"
           >
             <a className="hover:bg-neutral p-2 rounded-sm">
@@ -34,7 +34,7 @@ export default function SidebarMenu() {
           </a>
         </li>
         <li>
-          <div className="tooltip tooltip-right md:hidden" data-tip="Email">
+          <div className="tooltip tooltip-right md:hidden p-0" data-tip="Email">
             <a className="hover:bg-neutral p-2 rounded-sm">
               <EmailIcon className="w-6" />
             </a>
@@ -45,7 +45,7 @@ export default function SidebarMenu() {
           </a>
         </li>
         <li>
-          <div className="tooltip tooltip-right md:hidden" data-tip="Chat">
+          <div className="tooltip tooltip-right md:hidden p-0" data-tip="Chat">
             <a className="hover:bg-neutral p-2 rounded-sm">
               <ChatIcon className="w-6" />
             </a>
@@ -57,7 +57,7 @@ export default function SidebarMenu() {
         </li>
         <li>
           <div
-            className="tooltip tooltip-right md:hidden"
+            className="tooltip tooltip-right md:hidden p-0"
             data-tip="Meu perfil"
           >
             <a className="hover:bg-neutral p-2 rounded-sm">

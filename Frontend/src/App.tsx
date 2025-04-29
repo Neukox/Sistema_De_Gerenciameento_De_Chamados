@@ -7,7 +7,7 @@ import SidebarMenu from "@components/ui/sidebar-menu";
 
 function App() {
   const [userDetails, setUserDetails] = useState<UserSession | null>();
-  const [toogleSidebar, setToggleSidebar] = useState<boolean>(false);
+  const [toogleSidebar, setToggleSidebar] = useState<boolean>(true);
 
   useEffect(() => {
     const item = sessionStorage.getItem("session");

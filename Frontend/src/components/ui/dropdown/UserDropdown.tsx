@@ -9,16 +9,17 @@ export default function UserDropdown() {
       </button>
 
       <ul
-        className="dropdown-content menu p-2 z-1 w-52 bg-base-200 rounded-sm shadow-sm mt-3 gap-2 text-base-content"
+        className="dropdown-content menu p-2 z-1 w-60 bg-base-200 rounded-sm shadow-sm mt-3 gap-2 text-base-content"
         tabIndex={0}
       >
-       {/*  <li className="flex-1">
-          <span className="badge badge-neutral badge-sm ml-2">Admin</span>
-        </li> */}
-        <li className="flex-1">
+       <li className="menu-title flex flex-row text-black justify-between gap-2">
+          User name
+          <span className="badge badge-neutral badge-sm">Admin</span>
+        </li>
+        <li className="">
           <a>Perfil</a>
         </li>
-        <li className="flex-1">
+        <li className="">
           <a>Sair</a>
         </li>
       </ul>
