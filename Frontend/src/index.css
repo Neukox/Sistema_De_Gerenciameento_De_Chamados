@@ -33,6 +33,31 @@
   --breakpoint-xs: 28.5rem;
   --gradient-1: oklch(30.4% 18.25% 281.174);
   --gradient-2: oklch(63% 31% 234.92);
+
+  --animate-open: slide-in 0.3s ease-in-out;
+  --animate-close: slide-out 0.3s ease-in-out;
+
+  @keyframes slide-in {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-out {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+  }
 }
 
 h1 {

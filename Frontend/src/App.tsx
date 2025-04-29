@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { UserSession } from "types/UserSession";
 import SidebarMenu from "@components/ui/sidebar-menu";
+import useToggle from "@hooks/useToggle";
 
 function App() {
   const [userDetails, setUserDetails] = useState<UserSession | null>();
-  const [toogleSidebar, setToggleSidebar] = useState<boolean>(true);
+  const { toggleState: toggle, toggle: toggleSidebar } = useToggle(false);
 
   useEffect(() => {
     const item = sessionStorage.getItem("session");
@@ -18,15 +19,11 @@ function App() {
     }
   }, []);
 
-  function handleClickHamburguerMenu() {
-    setToggleSidebar(!toogleSidebar);
-  }
-
   return (
     <div className="min-h-screen bg-base-100">
-      <Header onClickHamburguerMenu={handleClickHamburguerMenu} />
+      <Header onClickHamburguerMenu={toggleSidebar} />
       <div className="flex h-[calc(100vh_-_5.0625rem)]">
-        {toogleSidebar && <SidebarMenu />}
+        <SidebarMenu isOpen={toggle} onCloseSidebar={toggleSidebar} />
         <main className="flex flex-1 flex-col items-center justify-center gap-8">
           <h1>Teste de telas</h1>
           <div className="flex gap-4">
