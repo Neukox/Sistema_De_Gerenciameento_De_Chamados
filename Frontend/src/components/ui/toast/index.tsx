@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import CloseIcon from "@assets/icons/Close";
+import { useEffect, useState } from "react";
 
 interface ToastProps {
   message: string;
@@ -20,13 +21,20 @@ interface ToastProps {
  * @param {function} onClose - Função a ser chamada quando o toast for fechado.
  * @returns {JSX.Element} O componente de Toast renderizado.
  * */
-const Toast: React.FC<ToastProps> = ({
+export default function Toast({
   message,
   type = "info",
   duration,
   onClose,
-}) => {
+}: ToastProps) {
   const [visible, setVisible] = useState(true);
+
+  const alertTypes = {
+    success: "alert-success",
+    error: "alert-error",
+    info: "alert-info",
+    warning: "alert-warning",
+  };
 
   useEffect(() => {
     if (duration) {
@@ -41,21 +49,19 @@ const Toast: React.FC<ToastProps> = ({
 
   return (
     <div
-      className={`w-fit max-w-[30rem] toast toast-${type} toast-top toast-center ${
+      className={`w-fit max-w-[30rem] toast toast-top toast-center ${
         visible ? "visible" : "hidden"
       } p-2`}
     >
-      <div className={`alert alert-${type} flex items-center gap-4`}>
+      <div className={`alert ${alertTypes[type]} flex items-center gap-4`}>
         <span className="whitespace-nowrap">{message}</span>
         <button
           onClick={onClose}
           className="btn btn-sm btn-circle btn-ghost bg-transparent border-none"
         >
-          ✕
+          <CloseIcon className="w-5" />
         </button>
       </div>
     </div>
   );
-};
-
-export default Toast;
+}
