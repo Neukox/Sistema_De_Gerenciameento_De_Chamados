@@ -1,3 +1,11 @@
+/**
+ * @description Componente de ícone de Dashboard.
+ * 
+ * Esse componente renderiza um ícone de dashboard em SVG.
+ * 
+ * @param {string} [className] - Classes CSS adicionais para estilização do ícone.
+ * @returns {JSX.Element} O componente de ícone de Dashboard renderizado.
+ * */
 export default function DashboardIcon({ className }: { className?: string }) {
   return (
     <svg

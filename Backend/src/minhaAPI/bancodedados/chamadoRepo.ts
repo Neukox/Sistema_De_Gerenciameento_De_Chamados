@@ -15,6 +15,9 @@ export interface ChamadoDBCompleto extends ChamadoDB {
   usuarioNome: string;
 }
 
+// Funções para manipulação de chamados no banco de dados
+
+// Função para buscar todos os chamados e filtrá-los por tipo e status (se fornecidos)
 export async function buscarChamados(
   type?: string,
   status?: string
@@ -43,6 +46,7 @@ export async function buscarChamados(
   return chamados;
 }
 
+// Função para buscar chamados por ID de usuário e filtrá-los por tipo e status (se fornecidos)
 export async function buscarChamadosPorUsuarioId(
   usuarioId: number,
   type?: string,
@@ -72,6 +76,7 @@ export async function buscarChamadosPorUsuarioId(
   return chamados;
 }
 
+// Função para buscar chamado por ID
 export async function buscarChamadosPorId(
   id: number
 ): Promise<ChamadoDBCompleto | undefined> {
@@ -103,6 +108,7 @@ export async function inserirChamado(
   await db.close();
 }
 
+// Função para atualizar um chamado existente
 export async function atualizarChamado(
   id: number,
   titulo: string,
@@ -119,6 +125,8 @@ export async function atualizarChamado(
   await db.close();
 }
 
+
+// Função para atualizar o status de um chamado
 export async function atualizarStatusChamado(id: number, status: string) {
   const db = await connectDB();
 
@@ -136,6 +144,7 @@ export async function atualizarStatusChamado(id: number, status: string) {
   await stmt.finalize();
 }
 
+// Função para cancelar um chamado
 export async function cancelarChamado(id: number) {
   const db = await connectDB();
   

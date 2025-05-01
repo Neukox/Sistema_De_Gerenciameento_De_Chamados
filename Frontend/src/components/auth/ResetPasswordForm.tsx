@@ -53,6 +53,7 @@ export default function RegisterForm() {
     },
   });
 
+  // Função chamada ao enviar o formulário
   const onResetPassword = (data: ResetPasswordData) => {
     // Tratando os dados do formulário
     if (!token) {
@@ -64,6 +65,7 @@ export default function RegisterForm() {
       token,
     };
 
+    // Executando a mutação para redefinir a senha
     mutation.mutate(resetData);
   };
 

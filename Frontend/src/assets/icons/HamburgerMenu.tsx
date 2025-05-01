@@ -1,3 +1,13 @@
+/**
+ * @description Componente de ícone de menu hamburguer.
+ *
+ * Esse componente renderiza um ícone de menu hamburguer em SVG.
+ * Ele é comumente usado em interfaces de usuário para indicar um menu colapsável.
+ *
+ * @param {string} [className] - Classes CSS adicionais para estilização do ícone.
+ * @returns {JSX.Element} O componente de ícone de menu hamburguer renderizado.
+ * */
+
 export default function HamburguerMenuIcon({
   className,
 }: {

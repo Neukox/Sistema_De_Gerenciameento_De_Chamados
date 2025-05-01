@@ -1,5 +1,15 @@
 import ChevronDownIcon from "@assets/icons/ChevronDown";
 
+/**
+ * @description Componente de Dropdown de Usuário.
+ * 
+ * Esse componente exibe um botão com o nome do usuário e um ícone de seta para baixo.
+ * Ao clicar no botão, um menu suspenso é exibido com opções como "Perfil" e "Sair".
+ * Ele é utilizado principalmente para permitir que o usuário acesse rapidamente suas configurações ou saia da conta.
+ * 
+ * @component
+ * @returns {JSX.Element} O componente de Dropdown de Usuário renderizado.
+ */
 export default function UserDropdown() {
   return (
     <div className="dropdown dropdown-end">

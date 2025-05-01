@@ -1,3 +1,13 @@
+/**
+ * @description Componente CloseIcon
+ *
+ * Esse componente é um ícone SVG que representa um botão de fechar.
+ * Ele é utilizado em diversos lugares da aplicação, como em modais, pop-ups e menus.
+ *
+ * @param {className} - Classe CSS opcional para estilização do ícone.
+ * @returns {JSX.Element} - O ícone SVG do botão de fechar.
+ */
+
 export default function CloseIcon({ className }: { className?: string }) {
   return (
     <svg

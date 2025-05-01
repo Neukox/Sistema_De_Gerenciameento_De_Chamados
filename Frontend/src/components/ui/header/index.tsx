@@ -2,6 +2,16 @@ import HamburguerMenuIcon from "@assets/icons/HamburgerMenu";
 import logo from "@assets/logo.png";
 import UserDropdown from "../dropdown/UserDropdown";
 
+/**
+ * @description Componente de Cabeçalho (Header) para navegação.
+ *
+ * Esse componente exibe um cabeçalho com um menu hamburguer, logo e um dropdown de usuário.
+ * Ele é utilizado principalmente em dispositivos móveis, mas também é exibido em telas maiores.
+ *
+ * @component
+ * @param {function} onClickHamburguerMenu - Função a ser chamada quando o menu hamburguer for clicado.
+ * @returns {JSX.Element} O componente de Cabeçalho renderizado.
+ */
 export default function Header({
   onClickHamburguerMenu,
 }: {

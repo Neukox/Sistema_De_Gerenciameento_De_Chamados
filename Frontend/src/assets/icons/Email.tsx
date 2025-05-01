@@ -1,3 +1,12 @@
+/**
+ * @description Componente de ícone de Email.
+ *
+ * Esse componente renderiza um ícone de email em SVG.
+ *
+ * @param {string} [className] - Classes CSS adicionais para estilização do ícone.
+ * @returns {JSX.Element} O componente de ícone de Email renderizado.
+ * */
+
 export default function EmailIcon({ className }: { className?: string }) {
   return (
     <svg

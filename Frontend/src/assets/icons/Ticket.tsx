@@ -1,3 +1,12 @@
+/**
+ * @description Componente de ícone de ticket.
+ *
+ * Esse componente renderiza um ícone de ticket em SVG.
+ *
+ * @param {string} [className] - Classes CSS adicionais para estilização do ícone.
+ * @returns {JSX.Element} O componente de ícone de ticket renderizado.
+ * */
+
 export default function TicketIcon({ className }: { className?: string }) {
   return (
     <svg

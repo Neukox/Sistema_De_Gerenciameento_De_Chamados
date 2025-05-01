@@ -1,3 +1,12 @@
+/**
+ * @description Componente de ícone de perfil.
+ *
+ * Esse componente renderiza um ícone de perfil em SVG.
+ *
+ * @param {string} [className] - Classes CSS adicionais para estilização do ícone.
+ * @returns {JSX.Element} O componente de ícone de perfil renderizado.
+ * */
+
 export default function ProfileIcon({ className }: { className?: string }) {
   return (
     <svg

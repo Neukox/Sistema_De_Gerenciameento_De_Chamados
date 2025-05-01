@@ -53,6 +53,7 @@ export default function RecoverPasswordForm() {
     },
   });
 
+  // Função chamada ao enviar o formulário
   const onRecoverPassword = (data: RecoverPasswordData) => {
     mutation.mutate(data);
   };

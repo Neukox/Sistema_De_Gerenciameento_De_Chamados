@@ -10,8 +10,15 @@ A estrutura do projeto está organizada da seguinte forma:
 src/
 ├── assets/               # Arquivos estáticos (imagens, ícones, etc.)
 ├── components/           # Componentes reutilizáveis
-│   └── ui/               # Componentes de interface do usuário (formulários, botões, etc.)
+│   ├── auth/             # Componentes de autenticação (formulários, botões, etc.)
+│   └── ui/               # Componentes de interface do usuário (formulários, botões,
+etc.)
+├── hooks/               # Hooks personalizados
+├── lib/                 # Funções utilitárias
 ├── pages/                # Páginas do sistema
+├── schemas/             # Schemas de validação (Zod)
+├── services/            # Serviços de API (Axios)
+├── types/               # Tipos TypeScript
 ├── App.tsx               # Componente principal do aplicativo
 ├── main.tsx              # Ponto de entrada do React
 ├── routes.ts             # Configuração de rotas
@@ -21,17 +28,20 @@ src/
 ### Instalação
 
 1. Clone o repositório:
+
    ```bash
    git clone <url-do-repositorio>
    cd Frontend
    ```
 
 2. Instale as dependências:
+
    ```bash
    npm install
    ```
 
 3. Inicie o servidor de desenvolvimento:
+
    ```bash
    npm run dev
    ```
@@ -124,10 +134,99 @@ O projeto utiliza **TailwindCSS** para estilização, com temas personalizados c
 
 ```css
 @plugin "daisyui/theme" {
-    name: "neukox";
-    default: true;
-    --color-base-100: oklch(100% 0% 89.876);
-    --color-primary: oklch(21.3% 9.75% 250.09);
+  name: "neukox";
+  default: true;
+  --color-base-100: oklch(100% 0% 89.876);
+  --color-primary: oklch(21.3% 9.75% 250.09);
+}
+```
+
+### Validação de Formulários
+
+O projeto utiliza **Zod** e **React Hook Form** para validação de formulários. Os componentes de entrada são estilizados com **TailwindCSS** e **DaisyUI**.
+
+#### Exemplo de uso do `useForm` com validação:
+
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Input } from "@components/ui/input";
+import { Button } from "@components/ui/button";
+import { Form } from "@components/ui/form";
+import { FormField } from "@components/ui/form-field";
+import { FormItem } from "@components/ui/form-item";
+
+const schema = z.object({
+  email: z.string().email("Email inválido").nonempty("Email é obrigatório"),
+  password: z.string().min(6, "Senha deve ter pelo menos 6 caracteres"),
+});
+
+function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
+  return (
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <FormField>
+        <FormItem>
+          <Input {...register("email")} placeholder="Email" />
+          {errors.email && <span>{errors.email.message}</span>}
+        </FormItem>
+      </FormField>
+      <FormField>
+        <FormItem>
+          <Input
+            {...register("password")}
+            type="password"
+            placeholder="Senha"
+          />
+          {errors.password && <span>{errors.password.message}</span>}
+        </FormItem>
+      </FormField>
+      <Button type="submit">Entrar</Button>
+    </Form>
+  );
+}
+```
+
+### Gerenciamento de Estado
+
+O projeto utiliza o **React Query** para gerenciamento de estado e requisições assíncronas. As requisições são feitas utilizando **Axios**.
+
+#### Exemplo de uso do React Query:
+
+```tsx
+import { useQuery } from "react-query";
+import axios from "axios";
+
+const fetchChamados = async () => {
+  const response = await axios.get("/api/chamados");
+  return response.data;
+};
+
+function ChamadosList() {
+  const { data, error, isLoading } = useQuery("chamados", fetchChamados);
+
+  if (isLoading) return <div>Carregando...</div>;
+  if (error) return <div>Erro ao carregar chamados</div>;
+
+  return (
+    <ul>
+      {data.map((chamado) => (
+        <li key={chamado.id}>{chamado.titulo}</li>
+      ))}
+    </ul>
+  );
 }
 ```
 

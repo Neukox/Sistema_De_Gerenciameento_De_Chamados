@@ -1,3 +1,12 @@
+/**
+ * @file Chat.tsx
+ *
+ * Componente ChatIcon
+ * Este componente é um ícone SVG que representa um balão de chat.
+ *
+ * @param {className} - Classe CSS opcional para estilização do ícone.
+ * @returns {JSX.Element} - O ícone SVG do balão de chat.
+ */
 export default function ChatIcon({ className }: { className?: string }) {
   return (
     <svg

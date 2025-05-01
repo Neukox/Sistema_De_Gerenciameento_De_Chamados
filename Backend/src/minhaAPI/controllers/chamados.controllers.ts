@@ -10,6 +10,25 @@ import {
 } from "../bancodedados/chamadoRepo";
 import formatDate from "../utils/dateConverter";
 
+/**
+ * Controller para gerenciar chamados.
+ * Contém funções para buscar, criar, atualizar e cancelar chamados.
+ * 
+ * @module ChamadosController
+ * @requires express
+ * @requires ../bancodedados/chamadoRepo
+ * @requires ../utils/dateConverter
+ * */
+
+/**
+ * Busca todos os chamados com base nos parâmetros de consulta fornecidos.
+ * 
+ * @function getAll
+ * @param {Request} req - Objeto de solicitação do Express.
+ * @param {Response} res - Objeto de resposta do Express.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
+ * @throws {Error} - Lança um erro se ocorrer um problema ao buscar os chamados.
+ * */
 const getAll = async (req: Request, res: Response): Promise<void> => {
   const { type, status } = req.query;
 
@@ -40,6 +59,15 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+/**
+ * Busca um chamado específico com base no ID fornecido.
+ * 
+ * @function getById
+ * @param {Request} req - Objeto de solicitação do Express.
+ * @param {Response} res - Objeto de resposta do Express.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
+ * @throws {Error} - Lança um erro se ocorrer um problema ao buscar o chamado.
+ * */
 async function getById(req: Request, res: Response): Promise<void> {
   const id = Number(req.params.id);
 
@@ -67,6 +95,16 @@ async function getById(req: Request, res: Response): Promise<void> {
     console.error("Erro ao buscar chamado:", error);
   }
 }
+
+/**
+ * Busca chamados de um usuário específico com base no ID fornecido.
+ * 
+ * @function getByUserId
+ * @param {Request} req - Objeto de solicitação do Express.
+ * @param {Response} res - Objeto de resposta do Express.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
+ * @throws {Error} - Lança um erro se ocorrer um problema ao buscar os chamados.
+ * */
 
 async function getByUserId(req: Request, res: Response): Promise<void> {
   const usuarioId = Number(req.params.id);
@@ -102,6 +140,16 @@ async function getByUserId(req: Request, res: Response): Promise<void> {
   }
 }
 
+/**
+ * Cria um novo chamado com base nos dados fornecidos.
+ * 
+ * @function create
+ * @param {Request} req - Objeto de solicitação do Express.
+ * @param {Response} res - Objeto de resposta do Express.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
+ * @throws {Error} - Lança um erro se ocorrer um problema ao criar o chamado.
+ * */
+
 async function create(req: Request, res: Response): Promise<void> {
   const {
     titulo,
@@ -124,6 +172,16 @@ async function create(req: Request, res: Response): Promise<void> {
     console.error("Erro ao criar chamado:", error);
   }
 }
+
+/**
+ * Atualiza um chamado existente com base no ID fornecido e nos dados atualizados.
+ * 
+ * @function update
+ * @param {Request} req - Objeto de solicitação do Express.
+ * @param {Response} res - Objeto de resposta do Express.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
+ * @throws {Error} - Lança um erro se ocorrer um problema ao atualizar o chamado.
+ * */
 
 async function update(req: Request, res: Response): Promise<void> {
   const id = Number(req.params.id);
@@ -150,6 +208,16 @@ async function update(req: Request, res: Response): Promise<void> {
     console.error("Erro ao atualizar chamado:", error);
   }
 }
+
+/**
+ * Atualiza o status de um chamado existente com base no ID fornecido e no novo status.
+ * 
+ * @function updateStatus
+ * @param {Request} req - Objeto de solicitação do Express.
+ * @param {Response} res - Objeto de resposta do Express.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
+ * @throws {Error} - Lança um erro se ocorrer um problema ao atualizar o status do chamado.
+ * */
 
 async function updateStatus(req: Request, res: Response): Promise<void> {
   const id = Number(req.params.id);
@@ -193,6 +261,16 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
     console.error("Erro ao atualizar chamado:", error);
   }
 }
+
+/**
+ * Cancela um chamado existente com base no ID fornecido.
+ * 
+ * @function cancel
+ * @param {Request} req - Objeto de solicitação do Express.
+ * @param {Response} res - Objeto de resposta do Express.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
+ * @throws {Error} - Lança um erro se ocorrer um problema ao cancelar o chamado.
+ * */
 
 async function cancel(req: Request, res: Response): Promise<void> {
   const id = Number(req.params.id);

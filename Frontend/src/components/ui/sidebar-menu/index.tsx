@@ -6,6 +6,17 @@ import ProfileIcon from "@assets/icons/Profile";
 import TicketIcon from "@assets/icons/Ticket";
 import logo from "@assets/logo.png";
 
+/**
+ * @description Componente de Menu Lateral (Sidebar) para navegação.
+ *
+ * Esse componente exibe um menu lateral que pode ser aberto ou fechado.
+ * Ele é utilizado principalmente em dispositivos móveis, mas também é exibido em telas maiores.
+ *
+ * @component
+ * @param {boolean} isOpen - Indica se o menu lateral está aberto ou fechado.
+ * @param {function} [onCloseSidebar] - Função a ser chamada quando o menu lateral for fechado.
+ * @returns {JSX.Element} O componente de Menu Lateral renderizado.
+ * */
 export default function SidebarMenu({
   isOpen,
   onCloseSidebar,

@@ -1,3 +1,13 @@
+/**
+ * @file ChevronDown.tsx
+ *
+ * Componente ChevronDownIcon
+ * Este componente é um ícone SVG que representa uma seta para baixo.
+ * 
+ * @param {className} - Classe CSS opcional para estilização do ícone.
+ * @returns {JSX.Element} - O ícone SVG da seta para baixo.
+ */
+
 export default function ChevronDownIcon({ className }: { className?: string }) {
   return (
     <svg
