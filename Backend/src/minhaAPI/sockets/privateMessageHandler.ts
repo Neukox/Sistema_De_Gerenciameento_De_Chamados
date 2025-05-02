@@ -1,29 +1,66 @@
-import WebSocket from 'ws';
+import WebSocket from "ws";
 
 // Um objeto simples para armazenar os clientes conectados
-const clients: Map<string, WebSocket> = new Map();
+const chamados: Map<string, Map<string, WebSocket>> = new Map();
 
-// Função para registrar um cliente, associando-o a um identificador (como o ID do usuário)
-export const registerClient = (ws: WebSocket): void => {
-  const userId = generateUniqueId(); // Você pode usar um ID real ou gerar um ID único
-  clients.set(userId, ws);
-  console.log(`Cliente ${userId} registrado`);
+/**
+ *
+ * Registra um cliente em um chamado específico.
+ *
+ * @param ws WebSocket
+ * @param chamadoId ID do chamado
+ * @param userId ID do usuário
+ * @returns void
+ */
+export const registerClient = (
+  ws: WebSocket,
+  chamadoId: string,
+  userId: string
+): void => {
+  if (!chamados.has(chamadoId)) {
+    chamados.set(chamadoId, new Map());
+  }
+  const chamadoClients = chamados.get(chamadoId);
+  chamadoClients?.set(userId, ws);
+
+  console.log(`Usuário ${userId} registrado no chamado ${chamadoId}`);
 };
 
-// Função para enviar uma mensagem privada para um cliente
-export const sendPrivateMessage = (message: any): void => {
-  const { to, content } = message; // Destinatário e conteúdo da mensagem
-  const recipientWs = clients.get(to);
-
-  if (recipientWs) {
-    recipientWs.send(JSON.stringify({ type: 'private_message', content }));
-    console.log(`Mensagem privada enviada para ${to}`);
-  } else {
-    console.log(`Cliente ${to} não encontrado`);
+/**
+ *
+ * Desregistra um cliente de um chamado específico.
+ * @param chamadoId ID do chamado
+ * @param userId ID do usuário
+ * @returns void
+ */
+export const unregisterClient = (chamadoId: string, userId: string): void => {
+  const chamadoClients = chamados.get(chamadoId);
+  if (chamadoClients) {
+    chamadoClients.delete(userId);
+    console.log(`Usuário ${userId} desregistrado do chamado ${chamadoId}`);
   }
 };
 
-// Função para gerar um ID único (exemplo)
-const generateUniqueId = (): string => {
-  return Math.random().toString(36).substr(2, 9); // Gera um ID aleatório
+/**
+ *
+ * Envia uma mensagem para todos os clientes registrados em um chamado específico.
+ *
+ * @param chamadoId ID do chamado
+ * @param message Mensagem a ser enviada
+ * @returns void
+ * */
+export const sendMessageToChamado = (chamadoId: string, message: any): void => {
+  const chamadoClients = chamados.get(chamadoId);
+
+  if (chamadoClients) {
+    chamadoClients.forEach((client, userId) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ usuario_id: userId, ...message }));
+      }
+    });
+  } else {
+    console.log(`Nenhum cliente registrado para o chamado ${chamadoId}`);
+  }
 };
+
+
