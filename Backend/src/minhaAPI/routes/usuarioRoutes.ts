@@ -1,12 +1,17 @@
 import express from "express";
+import userController from "../controllers/usuario.controllers";
 import { registerUser } from "../controllers/register/register";
 import { Login } from "../controllers/login/login";
 import { forgotPassword } from "../controllers/forgotpassword/forgotPassword";
 import { resetPassword } from "../controllers/resetpassword/resetPassword";
 import jwt from "jsonwebtoken";
 import { decodeToken, generateToken } from "../utils/JWT";
+import { validateIdParam } from "../middlewares/validateParams";
 
 const router = express.Router();
+
+// Rota para atualizar informações do usuário
+router.get("/user/:id", validateIdParam, userController.getUserInfo);
 
 // Rota para registro de usuário
 router.post("/register", async (req: any, res: any) => {
@@ -111,5 +116,15 @@ router.post("/reset-password", async (req: any, res: any) => {
     res.status(400).json({ erro: error.message });
   }
 });
+
+// Rota para atualizar informações do usuário
+router.put("/user/:id", validateIdParam, userController.updateUserInfo);
+
+// Rota para alterar a senha do usuário
+router.patch(
+  "/user/change-password/:id",
+  validateIdParam,
+  userController.changePassword
+);
 
 export default router;

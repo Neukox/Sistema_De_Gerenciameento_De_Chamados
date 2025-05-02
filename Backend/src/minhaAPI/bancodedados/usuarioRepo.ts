@@ -42,3 +42,40 @@ export async function inserirUsuario(
     privateKey
   );
 }
+
+export async function buscarUsuarioPorId(
+  id: number
+): Promise<UsuarioDB | undefined> {
+  const db = await connectDB();
+
+  const usuario = await db.get<UsuarioDB>(
+    "SELECT * FROM usuarios WHERE id = ?",
+    [id]
+  );
+
+  db.close();
+  return usuario;
+}
+
+export async function atualizarInformacoesUsuario(
+  id: number,
+  nome: string,
+  email: string
+): Promise<void> {
+  const db = await connectDB();
+
+  await db.run("UPDATE usuarios SET nome = ?, email = ? WHERE id = ?", [
+    nome,
+    email,
+    id,
+  ]);
+
+  db.close();
+}
+
+export async function alterarSenha(id: number, senha: string): Promise<void> {
+  const db = await connectDB();
+
+  await db.run("UPDATE usuarios SET senha = ? WHERE id = ?", [senha, id]);
+  db.close();
+}
