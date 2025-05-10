@@ -20,23 +20,24 @@ export interface ChamadoDBCompleto extends ChamadoDB {
 // Função para buscar todos os chamados e filtrá-los por tipo e status (se fornecidos)
 export async function buscarChamados(
   type?: string,
+  search?: string,
   status?: string
 ): Promise<ChamadoDBCompleto[]> {
   const db = await connectDB();
 
   let query =
-    "SELECT c.*, u.nome as usuarioNome FROM chamados c JOIN usuarios u ON c.usuario_id = u.id";
+    "SELECT c.*, u.nome as usuarioNome FROM chamados c JOIN usuarios u ON c.usuario_id = u.id WHERE c.titulo LIKE ?";
 
-  const params: string[] = [];
+  const params: string[] = [`%${search || ""}%`];
 
   if (type && status) {
-    query += " WHERE tipo_atendimento = ? AND status = ?";
+    query += " AND tipo_atendimento = ? AND status = ?";
     params.push(type, status);
   } else if (type) {
-    query += " WHERE tipo_atendimento = ?";
+    query += " AND tipo_atendimento = ?";
     params.push(type);
   } else if (status) {
-    query += " WHERE status = ?";
+    query += " AND status = ?";
     params.push(status);
   }
 
@@ -49,15 +50,16 @@ export async function buscarChamados(
 // Função para buscar chamados por ID de usuário e filtrá-los por tipo e status (se fornecidos)
 export async function buscarChamadosPorUsuarioId(
   usuarioId: number,
+  search?: string,
   type?: string,
   status?: string
 ): Promise<ChamadoDB[]> {
   const db = await connectDB();
 
   let query =
-    "SELECT c.*, u.nome as usuarioNome FROM chamados c JOIN usuarios u ON c.usuario_id = u.id WHERE c.usuario_id = ?";
+    "SELECT c.*, u.nome as usuarioNome FROM chamados c JOIN usuarios u ON c.usuario_id = u.id WHERE c.usuario_id = ? AND c.titulo LIKE ?";
 
-  const params: string[] = [usuarioId.toString()];
+  const params: string[] = [usuarioId.toString(), `%${search || ""}%`];
 
   if (type && status) {
     query += " AND tipo_atendimento = ? AND status = ?";
@@ -125,7 +127,6 @@ export async function atualizarChamado(
   await db.close();
 }
 
-
 // Função para atualizar o status de um chamado
 export async function atualizarStatusChamado(id: number, status: string) {
   const db = await connectDB();
@@ -147,7 +148,7 @@ export async function atualizarStatusChamado(id: number, status: string) {
 // Função para cancelar um chamado
 export async function cancelarChamado(id: number) {
   const db = await connectDB();
-  
+
   await db.run(
     "UPDATE chamados SET status = 'cancelado', encerrado_em = CURRENT_TIMESTAMP WHERE id = ?",
     [id]

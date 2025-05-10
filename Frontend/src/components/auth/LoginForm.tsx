@@ -3,9 +3,9 @@ import Form from "@components/ui/form/";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { LoginData, loginSchema } from "../../schemas/auth/LoginSchema";
+import { LoginData, loginSchema } from "@schemas/auth/LoginSchema";
 import { useMutation } from "@tanstack/react-query";
-import { login, LoginResponse } from "../../services/authService";
+import { login, LoginResponse } from "@services/authServices";
 import axios from "axios";
 import Toast from "@components/ui/toast";
 

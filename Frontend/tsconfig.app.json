@@ -26,9 +26,10 @@
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
       "@pages/*": ["pages/*"],
-      "@types/*": ["types/*"],
       "@services/*": ["services/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@queries/*": ["queries/*"],
+      "@schemas/*": ["schemas/*"]
     }
   },
   "include": ["src"]

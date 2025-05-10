@@ -4,10 +4,10 @@ import { Link, useNavigate } from "react-router";
 import {
   RegisterData,
   registerSchema,
-} from "../../schemas/auth/RegisterSchema";
+} from "@schemas/auth/RegisterSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { RegisterResponse, registerUser } from "../../services/authService";
+import { RegisterResponse, registerUser } from "@services/authServices";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Toast from "@components/ui/toast";

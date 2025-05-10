@@ -1,10 +1,11 @@
+import React from "react";
 import { createBrowserRouter } from "react-router";
-import App from "./App";
 import AuthLayout from "@pages/auth/AuthLayout";
 import Cadastro from "@pages/auth/cadastro/Cadastro";
 import Login from "@pages/auth/login/Login";
 import RecuperarSenha from "@pages/auth/recuperar-senha/RecuperarSenha";
 import RedefinirSenha from "@pages/auth/redefinir-senha/RedefinirSenha";
+import MainLayout from "@pages/MainLayout";
 
 /**
  * @description Configuração das rotas da aplicação utilizando o React Router.
@@ -19,15 +20,34 @@ import RedefinirSenha from "@pages/auth/redefinir-senha/RedefinirSenha";
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: App,
+    Component: MainLayout,
+    // loader: roleBasedLoader,
+    children: [
+      {
+        index: true,
+        Component: React.lazy(() => import("@pages/cliente/dashboard/page")),
+      },
+      {
+        path: "chamados-email",
+        Component: React.lazy(
+          () => import("@pages/cliente/chamados-email/page")
+        ),
+      },
+      {
+        path: "chamados-chat",
+        Component: React.lazy(
+          () => import("@pages/cliente/chamados-chat/page")
+        ),
+      },
+    ],
   },
   {
     Component: AuthLayout,
     children: [
-      { path: "/cadastro", Component: Cadastro },
-      { path: "/login", Component: Login },
-      { path: "/recuperar-senha", Component: RecuperarSenha },
-      { path: "/redefinir-senha", Component: RedefinirSenha },
+      { path: "cadastro", Component: Cadastro },
+      { path: "login", Component: Login },
+      { path: "recuperar-senha", Component: RecuperarSenha },
+      { path: "redefinir-senha", Component: RedefinirSenha },
     ],
   },
 ]);

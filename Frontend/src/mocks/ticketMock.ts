@@ -1,0 +1,73 @@
+import { Ticket } from "types/Ticket";
+
+// Mock de dados de tickets
+// Este mock pode ser utilizado para simular a resposta de uma API
+// ou para testes em componentes que dependem de dados de tickets.
+export const ticketMock: Ticket[] = [
+  {
+    id: 1,
+    titulo: "Problema com o login",
+    descricao: "Não consigo acessar minha conta.",
+    status: "aberto",
+    usuario_id: 1,
+    usuario_nome: "João Silva",
+    data_criacao: "2023-10-01 10:00:00",
+    data_encerramento: null,
+    tipo_atendimento: "email",
+  },
+  {
+    id: 2,
+    titulo: "Erro no sistema de pagamento",
+    descricao: "O sistema de pagamento está apresentando erro.",
+    status: "em andamento",
+    usuario_id: 2,
+    usuario_nome: "Maria Oliveira",
+    data_criacao: "2023-10-02 12:30:00",
+    data_encerramento: null,
+    tipo_atendimento: "chat",
+  },
+  {
+    id: 3,
+    titulo: "Dúvida sobre o plano de assinatura",
+    descricao: "Gostaria de mais informações sobre o plano premium.",
+    status: "pendente",
+    usuario_id: 3,
+    usuario_nome: "Carlos Pereira",
+    data_criacao: "2023-10-03 14:15:00",
+    data_encerramento: null,
+    tipo_atendimento: "email",
+  },
+  {
+    id: 4,
+    titulo: "Problema com a atualização do aplicativo",
+    descricao: "O aplicativo não está atualizando corretamente.",
+    status: "resolvido",
+    usuario_id: 4,
+    usuario_nome: "Ana Costa",
+    data_criacao: "2023-10-04T09:45:00Z",
+    data_encerramento: "2023-10-05 11:00:00",
+    tipo_atendimento: "chat",
+  },
+  {
+    id: 5,
+    titulo: "Erro ao gerar relatório",
+    descricao: "Não consigo gerar o relatório mensal.",
+    status: "fechado",
+    usuario_id: 5,
+    usuario_nome: "Lucas Santos",
+    data_criacao: "2023-10-06 08:30:00 ",
+    data_encerramento: "2023-10-07 10:00:00",
+    tipo_atendimento: "email",
+  },
+  {
+    id: 6,
+    titulo: "Solicitação de reembolso",
+    descricao: "Preciso solicitar um reembolso.",
+    status: "cancelado",
+    usuario_id: 6,
+    usuario_nome: "Fernanda Lima",
+    data_criacao: "2023-10-08 13:00:00",
+    data_encerramento: null,
+    tipo_atendimento: "chat",
+  },
+];

@@ -3,6 +3,8 @@ import Field from "./Field";
 import Label from "./Label";
 import Error from "./Error";
 import Submit from "./Submit";
+import Select from "./Select";
+import Search from "./Search";
 
 /**
  * Componente funcional React que renderiza um formulário.
@@ -16,6 +18,8 @@ import Submit from "./Submit";
 
 const Form = {
   Input,
+  Select,
+  Search,
   Field,
   Label,
   Error,

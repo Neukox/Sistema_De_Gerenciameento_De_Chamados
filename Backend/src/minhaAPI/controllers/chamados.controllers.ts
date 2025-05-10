@@ -13,7 +13,7 @@ import formatDate from "../utils/dateConverter";
 /**
  * Controller para gerenciar chamados.
  * Contém funções para buscar, criar, atualizar e cancelar chamados.
- * 
+ *
  * @module ChamadosController
  * @requires express
  * @requires ../bancodedados/chamadoRepo
@@ -22,7 +22,7 @@ import formatDate from "../utils/dateConverter";
 
 /**
  * Busca todos os chamados com base nos parâmetros de consulta fornecidos.
- * 
+ *
  * @function getAll
  * @param {Request} req - Objeto de solicitação do Express.
  * @param {Response} res - Objeto de resposta do Express.
@@ -30,10 +30,14 @@ import formatDate from "../utils/dateConverter";
  * @throws {Error} - Lança um erro se ocorrer um problema ao buscar os chamados.
  * */
 const getAll = async (req: Request, res: Response): Promise<void> => {
-  const { type, status } = req.query;
+  const { type, search, status } = req.query;
 
   try {
-    const chamados = await buscarChamados(type as string, status as string);
+    const chamados = await buscarChamados(
+      type as string,
+      search as string,
+      status as string
+    );
 
     if (!chamados || chamados.length === 0) {
       res.status(404).json({ message: "Nenhum chamado encontrado" });
@@ -61,7 +65,7 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
 
 /**
  * Busca um chamado específico com base no ID fornecido.
- * 
+ *
  * @function getById
  * @param {Request} req - Objeto de solicitação do Express.
  * @param {Response} res - Objeto de resposta do Express.
@@ -98,7 +102,7 @@ async function getById(req: Request, res: Response): Promise<void> {
 
 /**
  * Busca chamados de um usuário específico com base no ID fornecido.
- * 
+ *
  * @function getByUserId
  * @param {Request} req - Objeto de solicitação do Express.
  * @param {Response} res - Objeto de resposta do Express.
@@ -108,17 +112,18 @@ async function getById(req: Request, res: Response): Promise<void> {
 
 async function getByUserId(req: Request, res: Response): Promise<void> {
   const usuarioId = Number(req.params.id);
-  const { type, status } = req.query;
+  const { search, type, status } = req.query;
 
   try {
     const chamados = await buscarChamadosPorUsuarioId(
       usuarioId,
+      search as string,
       type as string,
       status as string
     );
 
     if (!chamados || chamados.length === 0) {
-      res.status(404).json({ message: "Nenhum chamado encontrado" });
+      res.status(200).json({ message: "Nenhum chamado encontrado" });
       return;
     }
 
@@ -142,7 +147,7 @@ async function getByUserId(req: Request, res: Response): Promise<void> {
 
 /**
  * Cria um novo chamado com base nos dados fornecidos.
- * 
+ *
  * @function create
  * @param {Request} req - Objeto de solicitação do Express.
  * @param {Response} res - Objeto de resposta do Express.
@@ -169,13 +174,13 @@ async function create(req: Request, res: Response): Promise<void> {
     res.status(201).json({ message: "Chamado criado com sucesso" });
   } catch (error) {
     res.status(500).json({ error: "Erro ao criar chamado" });
-    console.error("Erro ao criar chamado:", error);
+    console.error("ErmutationFnro ao criar chamado:", error);
   }
 }
 
 /**
  * Atualiza um chamado existente com base no ID fornecido e nos dados atualizados.
- * 
+ *
  * @function update
  * @param {Request} req - Objeto de solicitação do Express.
  * @param {Response} res - Objeto de resposta do Express.
@@ -211,7 +216,7 @@ async function update(req: Request, res: Response): Promise<void> {
 
 /**
  * Atualiza o status de um chamado existente com base no ID fornecido e no novo status.
- * 
+ *
  * @function updateStatus
  * @param {Request} req - Objeto de solicitação do Express.
  * @param {Response} res - Objeto de resposta do Express.
@@ -264,7 +269,7 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
 
 /**
  * Cancela um chamado existente com base no ID fornecido.
- * 
+ *
  * @function cancel
  * @param {Request} req - Objeto de solicitação do Express.
  * @param {Response} res - Objeto de resposta do Express.

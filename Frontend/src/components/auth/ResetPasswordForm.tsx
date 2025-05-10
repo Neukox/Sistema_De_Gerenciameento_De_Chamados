@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 import {
   ResetPasswordData,
   resetPasswordSchema,
-} from "../../schemas/auth/ResetPasswordSchema";
+} from "@schemas/auth/ResetPasswordSchema";
 import { useMutation } from "@tanstack/react-query";
-import { resetPassword } from "../../services/authService";
+import { resetPassword } from "@services/authServices";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import axios from "axios";

@@ -5,10 +5,10 @@ import { Link } from "react-router";
 import {
   RecoverPasswordData,
   recoverPasswordSchema,
-} from "../../schemas/auth/RecoverPasswordSchema";
+} from "@schemas/auth/RecoverPasswordSchema";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { recoverPassword, RecoverPasswordResponse } from "../../services/authService";
+import { recoverPassword, RecoverPasswordResponse } from "@services/authServices";
 import axios from "axios";
 import Toast from "@components/ui/toast";
 
