@@ -9,18 +9,17 @@ import NavMenu from "./nav/Menu";
  * Ele é utilizado principalmente em dispositivos móveis, mas também é exibido em telas maiores.
  *
  * @component
- * @param {function} onClickHamburguerMenu - Função a ser chamada quando o menu hamburguer for clicado.
  * @returns {JSX.Element} O componente de Cabeçalho renderizado.
  */
 export default function Header() {
   return (
     <>
-      <header className="navbar py-0 fixed top-0 z-10 justify-between gap-4 bg-primary text-white border-b-1 border-neutral">
+      <header className="navbar h-20 py-0 fixed top-0 z-10 justify-between gap-4 bg-primary text-white border-b-1 border-neutral">
         <div className="xs:flex-1">
           <NavMenu />
         </div>
-        <div className="flex md:flex-1 justify-center">
-          <img src={logo} alt="logo da neukox" className="w-20 h-20" />
+        <div className="flex md:flex-1 justify-center relative">
+          <img src={logo} alt="logo da neukox" className="w-28 h-28" />
         </div>
         <div className="flex flex-1 justify-end">
           <UserDropdown />

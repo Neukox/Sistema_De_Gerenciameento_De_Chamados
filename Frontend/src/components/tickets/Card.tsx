@@ -2,6 +2,16 @@ import { Ticket } from "types/Ticket";
 import StatusTag from "./Status";
 import ServiceTypeTag from "./ServiceType";
 
+/**
+ * @description Componente de cartão para exibir informações de um chamado.
+ *
+ * Esse componente exibe o título, descrição, status e tipo de atendimento do chamado.
+ * Ele é utilizado principalmente para listar os chamados.
+ * 
+ * @component
+ * @param {Ticket} data - Dados do chamado a serem exibidos.
+ * @returns {JSX.Element} O componente de cartão renderizado.
+ */
 export default function TicketCard({ data }: { data: Ticket }) {
   return (
     <div className="card card-border min-h-72 xs:min-h-60 shadow-sm bg-base-100 w-full p-4 gap-4">

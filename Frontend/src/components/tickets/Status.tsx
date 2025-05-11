@@ -7,7 +7,18 @@ type TicketStatusProperties = {
 
 type TicketStatusContext = Record<TicketStatusType, TicketStatusProperties>;
 
+/**
+ * @component Exibe o status de um chamado com uma cor correspondente.
+ *
+ * @param {TicketStatusType} type - O status do chamado (aberto, em andamento, pendente, resolvido, fechado ou cancelado).
+ * @returns {JSX.Element} Componente StatusTag renderizado.
+ */
 export default function StatusTag({ type }: { type: TicketStatusType }) {
+  
+  // Define as opções de status de ticket com rótulos e classes correspondentes
+  // O status pode ser "aberto", "em andamento", "pendente", "resolvido", "fechado" ou "cancelado"
+  // A classe correspondente é usada para estilizar o badge
+  // O rótulo correspondente é exibido dentro do badge
   const status: TicketStatusContext = {
     aberto: {
       label: "Aberto",

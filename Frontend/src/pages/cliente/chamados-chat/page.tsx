@@ -3,6 +3,15 @@ import Search from "@components/ui/form/Search";
 import Select from "@components/ui/form/Select";
 import { userTicketsMock } from "../../../mocks/userTicketsMock";
 
+/**
+ * @description Página de Chamados por Chat do Cliente.
+ *
+ * Essa página exibe uma lista de chamados relacionados ao atendimento por chat.
+ * O usuário pode filtrar os chamados por status e pesquisar por palavras-chave.
+ *
+ * @component
+ * @returns {JSX.Element} O componente da página renderizado.
+ */
 export default function ClientTicketsChatPage() {
   const chatTickets = userTicketsMock.filter(
     (ticket) => ticket.tipo_atendimento === "chat"

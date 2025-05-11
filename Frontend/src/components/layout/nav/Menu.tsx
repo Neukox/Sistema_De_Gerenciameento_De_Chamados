@@ -17,14 +17,24 @@ import HamburguerMenuIcon from "@assets/icons/HamburgerMenu";
  * @returns {JSX.Element} O componente de Menu Lateral renderizado.
  * */
 export default function NavMenu() {
+  // Estado para controlar a abertura e fechamento do menu
   const { toggleState: isOpen, toggle } = useToggle(false);
+
+  // Referências para o elemento de navegação e o botão
+  // Essas referências são usadas para detectar cliques fora do menu e fechar o menu
   const navRef = useRef<HTMLElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
+  // Função chamada quando um link do menu é clicado
   function onClickNavLink() {
     toggle();
   }
 
+  // Função para lidar com cliques fora do menu
+  // Se o menu estiver aberto e o clique não for dentro do menu ou do botão, fecha o menu
+  // Essa função é adicionada como um ouvinte de eventos para cliques de mouse e toque
+  // Isso garante que o menu seja fechado quando o usuário clica fora dele
+  // ou toca em qualquer lugar da tela
   function handleClickOutside(event: MouseEvent | TouchEvent) {
     const target = event.target as Node;
 
@@ -38,6 +48,7 @@ export default function NavMenu() {
     }
   }
 
+  // Adiciona ouvintes de eventos para cliques fora do menu
   useEffect(() => {
     if (!isOpen) return;
 
@@ -54,17 +65,17 @@ export default function NavMenu() {
     <>
       <button
         ref={buttonRef}
-        className="btn btn-ghost btn-neutral"
+        className="btn btn-ghost btn-neutral p-2"
         onClick={() => toggle()}
         aria-label="Menu"
       >
-        <HamburguerMenuIcon className="w-6" />
+        <HamburguerMenuIcon className="w-8" />
       </button>
 
       <nav
         className={`${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } fixed top-[5.0625rem] left-0 h-[calc(100vh_-_5.0625rem)] bg-primary transition-transform duration-300 ease-in-out text-white p-4`}
+        } fixed top-20 left-0 h-[calc(100vh_-_5rem)] bg-primary transition-transform duration-300 ease-in-out text-white p-4`}
         ref={navRef}
       >
         <ul className="menu p-0 w-fit gap-2 font-medium">

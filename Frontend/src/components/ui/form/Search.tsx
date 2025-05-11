@@ -4,6 +4,15 @@ type SearchProps = {
   className?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
+/**
+ * Um componente de pesquisa personalizado.
+ * Permite ao usuário pesquisar por chamados.
+ *
+ * @param {SearchProps} props - Propriedades do componente.
+ * @param {string} [props.className] - Classe CSS adicional para estilização.
+ * @param {React.InputHTMLAttributes<HTMLInputElement>} rest - Outras propriedades do campo de entrada.
+ * @returns {JSX.Element} Componente de pesquisa personalizado.
+ */
 export default function Search({ className, ...rest }: SearchProps) {
   return (
     <div
