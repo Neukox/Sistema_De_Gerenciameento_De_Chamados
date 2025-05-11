@@ -79,3 +79,14 @@ export async function alterarSenha(id: number, senha: string): Promise<void> {
   await db.run("UPDATE usuarios SET senha = ? WHERE id = ?", [senha, id]);
   db.close();
 }
+
+export async function buscarEmailsAdmins(): Promise<string[]> {
+  const db = await connectDB();
+
+  const emails = await db.all<Pick<UsuarioDB, "email">[]>(
+    "SELECT email FROM usuarios WHERE tipo = 'admin'"
+  );
+
+  db.close();
+  return emails.map((admin) => admin.email);
+}

@@ -9,6 +9,7 @@ import {
   inserirChamado,
 } from "../bancodedados/chamadoRepo";
 import formatDate from "../utils/dateConverter";
+import { sendNotificationToAdmins } from "../services/notificationService";
 
 /**
  * Controller para gerenciar chamados.
@@ -169,12 +170,28 @@ async function create(req: Request, res: Response): Promise<void> {
   }
 
   try {
-    await inserirChamado(titulo, descricao, usuarioId, tipoAtendimento);
+    const createdChamado = await inserirChamado(
+      titulo,
+      descricao,
+      usuarioId,
+      tipoAtendimento
+    );
+
+    if (!createdChamado) {
+      res.status(500).json({ message: "Erro ao criar chamado" });
+      return;
+    }
+
+    const subject = `Novo chamado foi criado. ID: ${createdChamado.id}`;
+    const message = `Um novo chamado foi criado com os seguintes detalhes:\n\nTítulo: ${createdChamado.titulo}\nDescrição: ${createdChamado.descricao}\nTipo de Atendimento: ${createdChamado.tipo_atendimento}\n\nAcesse o chamado em: http://localhost:5173/chamado/${createdChamado.id}`;
+
+    // Enviar notificação para os administradores
+    await sendNotificationToAdmins(subject, message);
 
     res.status(201).json({ message: "Chamado criado com sucesso" });
   } catch (error) {
     res.status(500).json({ error: "Erro ao criar chamado" });
-    console.error("ErmutationFnro ao criar chamado:", error);
+    console.error("Erro ao criar chamado:", error);
   }
 }
 

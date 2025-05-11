@@ -97,7 +97,7 @@ export async function inserirChamado(
   descricao: string,
   usuarioId: number,
   tipoAdentimento: string
-) {
+): Promise<ChamadoDB | undefined> {
   const db = await connectDB();
   await db.run(
     "INSERT INTO chamados (titulo, descricao, usuario_id, tipo_atendimento) VALUES (?, ?, ?, ?)",
@@ -107,7 +107,12 @@ export async function inserirChamado(
     tipoAdentimento
   );
 
+  const chamado = await db.get<ChamadoDB>(
+    "SELECT * FROM chamados ORDER BY id DESC LIMIT 1"
+  );
+
   await db.close();
+  return chamado;
 }
 
 // Função para atualizar um chamado existente
