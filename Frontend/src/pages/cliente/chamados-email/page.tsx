@@ -19,7 +19,7 @@ export default function ClientEmailTicketsPage() {
   );
 
   return (
-    <div className="w-full bg-base-200 flex justify-center">
+    <div className="w-full bg-base-200 flex justify-center min-h-[calc(100vh-5.0625rem)]">
       <div className="w-full max-w-screen-xl mb-8 px-4">
         <h1 className="my-6">Meus Chamados por E-mail</h1>
         <div className="flex flex-col xs:flex-row gap-4 justify-between bg-base-20 mb-6">

@@ -1,6 +1,7 @@
 import ChevronDownIcon from "@assets/icons/ChevronDown";
 import LogoutIcon from "@assets/icons/Logout";
 import ProfileIcon from "@assets/icons/Profile";
+import { Link } from "react-router";
 
 /**
  * @description Componente de Dropdown de Usuário.
@@ -28,10 +29,10 @@ export default function UserDropdown() {
           User name
         </li>
         <li>
-          <a>
+          <Link to="/perfil/1" className="flex flex-row gap-2 items-center">
             <ProfileIcon className="w-6" />
-            Perfil
-          </a>
+            <span>Perfil</span>
+          </Link>
         </li>
         <li>
           <a>

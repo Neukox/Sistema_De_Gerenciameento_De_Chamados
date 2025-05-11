@@ -39,6 +39,10 @@ const router = createBrowserRouter([
           () => import("@pages/cliente/chamados-chat/page")
         ),
       },
+      {
+        path: "perfil/:id",
+        Component: React.lazy(() => import("@pages/cliente/perfil/page")),
+      },
     ],
   },
   {

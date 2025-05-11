@@ -3,6 +3,7 @@ import React from "react";
 type InputProps = {
   htmlFor: string;
   children: React.ReactNode;
+  className?: string;
 };
 
 /**
@@ -17,9 +18,9 @@ type InputProps = {
  * @returns {JSX.Element} O rótulo renderizado.
  */
 
-export default function Label({ htmlFor, children }: InputProps) {
+export default function Label({ htmlFor, children, className }: InputProps) {
   return (
-    <label htmlFor={htmlFor} className="label mb-2 font-bold text-primary">
+    <label htmlFor={htmlFor} className={`label mb-2 font-bold ${className}`}>
       {children}
     </label>
   );

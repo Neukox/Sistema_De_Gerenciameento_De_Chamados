@@ -5,6 +5,7 @@ import Error from "./Error";
 import Submit from "./Submit";
 import Select from "./Select";
 import Search from "./Search";
+import Password from "./Password";
 
 /**
  * Componente funcional React que renderiza um formulário.
@@ -24,6 +25,7 @@ const Form = {
   Label,
   Error,
   Submit,
+  Password,
 };
 
 export default Form;

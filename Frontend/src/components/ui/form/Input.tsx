@@ -28,7 +28,7 @@ export default function Input({
       id={id}
       type={type}
       placeholder={placeholder}
-      className={`input input-secondary rounded-none border-0 border-b-2 shadow-none focus:outline-0 hover:input-primary focus:outline-primary focus:input-primary bg-transparent w-full ${className}`}
+      className={`input input-secondary rounded-none border-0 border-b-2 shadow-none focus:outline-0 hover:input-accent focus:outline-accent focus:input-accent w-full ${className}`}
       {...rest}
     />
   );

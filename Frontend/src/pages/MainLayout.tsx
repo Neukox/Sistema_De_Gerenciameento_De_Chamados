@@ -13,7 +13,7 @@ export default function MainLayout() {
   return (
     <>
       <Header />
-      <main className="min-h-screen mt-[5.0625rem]">
+      <main className="mt-[5.0625rem]">
         <Outlet />
       </main>
     </>
