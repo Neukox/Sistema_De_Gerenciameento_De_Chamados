@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+/* 
+    * Este é um tema personalizado para o plugin DaisyUI do Tailwind CSS.
+    * Ele define um tema claro com valores de cores específicos e um breakpoint personalizado.
+    * O tema é chamado "neukox" e é definido como o tema padrão.
+    * As cores são definidas usando o espaço de cores oklch, que permite uma representação de cores mais uniforme perceptualmente.
+    * O breakpoint personalizado é definido como 28.5rem (456px).
+*/
+@plugin "daisyui/theme" {
+  name: "neukox";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: oklch(100% 0% 89.876);
+  --color-base-200: oklch(97% 0% 89.876);
+  --color-base-300: oklch(95% 0% 89.876);
+  --color-gradient-from: oklch(100% 0% 89.876);
+  --color-gradient-to: oklch(100% 0% 89.876);
+  --color-primary: oklch(33.4% 15.25% 234.873);
+  --color-secondary: oklch(54% 29.25% 237.751);
+  --color-accent: oklch(67.1% 37.25% 238.737);
+  --color-neutral: oklch(62.5% 14.25% 227.536);
+  --color-info: oklch(77.6% 37.25% 226.595);
+  --color-success: oklch(81.6% 56.75% 143.335);
+  --color-warning: oklch(91.9% 47.75% 107.691);
+  --color-error: oklch(93.3% 49.25% 24.658);
+}
+
+@theme {
+  /* Breakpoints */
+  --breakpoint-xs: 28.5rem; /* 456px */
+
+  /* Gradient */
+  --gradient-1: oklch(30.4% 18.25% 281.174);
+  --gradient-2: oklch(63% 31% 234.92);
+
+  /* Status Colors */
+  --color-aberto: oklch(65.8% 42.25% 248.814);
+  --color-andamento: oklch(77% 43.5% 64.054);
+  --color-pendente: oklch(92.8% 45% 102.497);
+  --color-resolvido: oklch(64% 43.75% 146.743);
+  --color-fechado: oklch(69.9% 0% 89.876);
+  --color-cancelado: oklch(59.5% 56.25% 29.665);
+}
+
+h1 {
+  @apply text-3xl font-bold;
+}
