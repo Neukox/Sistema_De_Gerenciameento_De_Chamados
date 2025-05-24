@@ -5,9 +5,8 @@ import { Link, useNavigate } from "react-router";
 import { LoginData, loginSchema } from "@schemas/auth/LoginSchema";
 import { useMutation } from "@tanstack/react-query";
 import { login, LoginResponse } from "@services/authServices";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
-import useError from "@hooks/useErrors";
 
 /**
  * Componente funcional React que renderiza um formulário de login.
@@ -21,12 +20,10 @@ import useError from "@hooks/useErrors";
 export default function LoginForm() {
   // Hook para exibir mensagens de toast
   const toast = useToast();
-  // Hook para exibir mensagens de erro
-  const { error: fecthError, addError, clearError } = useError();
 
   // Hook para navegação
   const navigate = useNavigate();
-
+  
   // Hook para gerenciar o estado do formulário
   const {
     register,
@@ -42,7 +39,11 @@ export default function LoginForm() {
   };
 
   // Hook para gerenciar a mutação de login
-  const mutation = useMutation<LoginResponse, Error, LoginData>({
+  const mutation = useMutation<
+    LoginResponse,
+    AxiosError<LoginResponse>,
+    LoginData
+  >({
     mutationFn: login,
     onSuccess: (data) => {
       // Armazena o token e a sessão no sessionStorage
@@ -53,21 +54,12 @@ export default function LoginForm() {
       navigate("/");
     },
     onError: (error) => {
-      // Verifica se o erro é do tipo AxiosError
-      if (axios.isAxiosError(error)) {
-        // Se o erro for do tipo AxiosError, exibe a mensagem de erro
-        addError(error.response?.data.mensagem || "Erro ao fazer login.");
-      } else {
-        // Caso contrário, exibe uma mensagem genérica
-        addError("Erro ao fazer login.");
-      }
-
       // Exibe um toast com a mensagem de erro
       toast?.show({
-        message: fecthError,
+        message:
+          error.response?.data.mensagem || "Houve um erro ao fazer login.",
         type: "error",
         duration: 3000,
-        onClose: clearError,
       });
     },
   });

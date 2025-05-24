@@ -62,6 +62,7 @@ export default function ToastProvider({
       if (props.duration) {
         setTimeout(() => {
           remove(id);
+          if (props.onClose) props.onClose();
         }, props.duration);
       }
     },

@@ -1,25 +1,20 @@
 import { api } from "../lib/api";
 import { UserSession } from "types/User";
 
-export type RegisterResponse = {
+export interface AuthResponse {
   mensagem: string;
+  erro?: string;
+}
+
+export interface RegisterResponse extends AuthResponse {
   session: UserSession;
   token: string;
-};
+}
 
-export type LoginResponse = {
-  mensagem: string;
+export interface LoginResponse extends AuthResponse {
   session: UserSession;
   token: string;
-};
-
-export type RecoverPasswordResponse = {
-  mensagem: string;
-};
-
-export type ResetPasswordResponse = {
-  mensagem: string;
-};
+}
 
 /**
  * @description Função para registrar um novo usuário
@@ -88,11 +83,8 @@ export function logout() {
  */
 export async function recoverPassword(data: {
   email: string;
-}): Promise<RecoverPasswordResponse> {
-  const response = await api.post<RecoverPasswordResponse>(
-    "/forgot-password",
-    data
-  );
+}): Promise<AuthResponse> {
+  const response = await api.post<AuthResponse>("/forgot-password", data);
   return response.data;
 }
 
@@ -111,10 +103,7 @@ export async function recoverPassword(data: {
 export async function resetPassword(data: {
   newPassword: string;
   token: string;
-}): Promise<ResetPasswordResponse> {
-  const response = await api.post<ResetPasswordResponse>(
-    "/reset-password",
-    data
-  );
+}): Promise<AuthResponse> {
+  const response = await api.post<AuthResponse>("/reset-password", data);
   return response.data;
 }

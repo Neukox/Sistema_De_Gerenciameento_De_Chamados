@@ -7,13 +7,9 @@ import {
   recoverPasswordSchema,
 } from "@schemas/auth/RecoverPasswordSchema";
 import { useMutation } from "@tanstack/react-query";
-import {
-  recoverPassword,
-  RecoverPasswordResponse,
-} from "@services/authServices";
-import axios from "axios";
+import { recoverPassword, AuthResponse } from "@services/authServices";
+import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
-import useError from "@hooks/useErrors";
 
 /**
  * Componente funcional React que renderiza um formulário de recuperação de senha.
@@ -28,8 +24,6 @@ import useError from "@hooks/useErrors";
 export default function RecoverPasswordForm() {
   // Hook para exibir mensagens de toast
   const toast = useToast();
-  // Hook para gerenciar o estado do erro
-  const { error: fecthError, addError, clearError } = useError();
   // Hook para gerenciar o estado do formulário
   const {
     register,
@@ -41,8 +35,8 @@ export default function RecoverPasswordForm() {
 
   // Hook para gerenciar a mutação de login
   const mutation = useMutation<
-    RecoverPasswordResponse,
-    Error,
+    AuthResponse,
+    AxiosError<AuthResponse>,
     RecoverPasswordData
   >({
     mutationFn: recoverPassword,
@@ -52,29 +46,16 @@ export default function RecoverPasswordForm() {
         message: data.mensagem,
         type: "success",
         duration: 3000,
-        onClose: clearError,
       });
     },
     onError: (error) => {
-      // Verifica se o erro é do tipo AxiosError
-      if (axios.isAxiosError(error)) {
-        // Se o erro for do tipo AxiosError, exibe a mensagem de erro
-        addError(
-          error.response?.data.mensagem ||
-            error.response?.data.erro ||
-            "Erro ao enviar recuperação de senha."
-        );
-      } else {
-        // Caso contrário, exibe uma mensagem genérica
-        addError("Erro ao enviar recuperação de senha.");
-      }
-
       // Exibe a mensagem de erro usando o hook de toast
       toast?.show({
-        message: fecthError,
+        message:
+          error.response?.data.mensagem ||
+          "Houve um erro ao recuperar a senha.",
         type: "error",
         duration: 3000,
-        onClose: clearError,
       });
     },
   });

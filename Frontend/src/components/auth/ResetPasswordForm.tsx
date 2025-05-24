@@ -6,11 +6,15 @@ import {
   resetPasswordSchema,
 } from "@schemas/auth/ResetPasswordSchema";
 import { useMutation } from "@tanstack/react-query";
-import { resetPassword } from "@services/authServices";
+import { AuthResponse, resetPassword } from "@services/authServices";
 import { Link, useSearchParams } from "react-router";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
-import useError from "@hooks/useErrors";
+
+type ResetPasswordRequest = {
+  newPassword: string;
+  token: string;
+};
 
 /**
  * Componente funcional React que renderiza um formulário de redefinição de senha.
@@ -23,8 +27,6 @@ import useError from "@hooks/useErrors";
 export default function RegisterForm() {
   // Hook para exibir mensagens de toast
   const toast = useToast();
-  // Hook para gerenciar o estado do erro
-  const { error: fecthError, addError, clearError } = useError();
 
   // Hook para capturar parâmetros de busca na URL
   const [searchParams] = useSearchParams();
@@ -39,7 +41,11 @@ export default function RegisterForm() {
   });
 
   // Hook para gerenciar a mutação de redefinição de senha
-  const mutation = useMutation({
+  const mutation = useMutation<
+    AuthResponse,
+    AxiosError<AuthResponse>,
+    ResetPasswordRequest
+  >({
     mutationFn: resetPassword,
     onSuccess: (data) => {
       // Exibe uma mensagem de sucesso usando o hook de toast
@@ -47,47 +53,26 @@ export default function RegisterForm() {
         message: data.mensagem,
         type: "success",
         duration: 3000,
-        onClose: clearError,
       });
     },
     onError: (error) => {
-      // Verifica se o erro é do tipo AxiosError
-      if (axios.isAxiosError(error)) {
-        // Se o erro for do tipo AxiosError, exibe a mensagem de erro
-        addError(
-          error.response?.data.mensagem ||
-            error.response?.data.erro ||
-            "Erro ao redefinir senha. Tente novamente."
-        );
-      } else {
-        // Caso contrário, exibe uma mensagem genérica
-        addError("Erro ao redefinir senha. Tente novamente.");
-      }
-
       // Exibe uma mensagem de erro usando o hook de toast
       toast?.show({
-        message: fecthError,
+        message:
+          error.response?.data.mensagem ||
+          error.response?.data.erro ||
+          "Houve um erro ao redefinir a senha.",
         type: "error",
         duration: 3000,
-        onClose: clearError,
       });
     },
   });
 
   // Função chamada ao enviar o formulário
   const onResetPassword = (data: ResetPasswordData) => {
-    // Tratando os dados do formulário
-    if (!token) {
-      toast?.show({
-        message: "Token inválido ou não fornecido.",
-        type: "error",
-        duration: 3000,
-      });
-      return;
-    }
-    const resetData = {
+    const resetData: ResetPasswordRequest = {
       newPassword: data.newPassword,
-      token,
+      token: token || "",
     };
 
     // Executando a mutação para redefinir a senha

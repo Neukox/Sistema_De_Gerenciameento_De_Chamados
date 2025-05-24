@@ -5,9 +5,8 @@ import { RegisterData, registerSchema } from "@schemas/auth/RegisterSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterResponse, registerUser } from "@services/authServices";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
-import useError from "@hooks/useErrors";
 
 /**
  * Componente funcional React que renderiza um formulário de registro.
@@ -20,8 +19,7 @@ import useError from "@hooks/useErrors";
 export default function RegisterForm() {
   // Hook para exibir mensagens de toast
   const toast = useToast();
-  // Hook para exibir mensagens de erro
-  const { error: fecthError, addError, clearError } = useError();
+
   // Hook para navegação
   const navigate = useNavigate();
 
@@ -35,7 +33,11 @@ export default function RegisterForm() {
   });
 
   // Hook para gerenciar a mutação de login
-  const mutation = useMutation<RegisterResponse, Error, RegisterData>({
+  const mutation = useMutation<
+    RegisterResponse,
+    AxiosError<RegisterResponse>,
+    RegisterData
+  >({
     mutationFn: registerUser,
     onSuccess: (data) => {
       // Armazena o token e a sessão no sessionStorage
@@ -46,25 +48,12 @@ export default function RegisterForm() {
       navigate("/");
     },
     onError: (error) => {
-      // Verifica se o erro é do tipo AxiosError
-      if (axios.isAxiosError(error)) {
-        // Se o erro for do tipo AxiosError, exibe a mensagem de erro
-        addError(
-          error.response?.data.mensagem ||
-            error.response?.data.erro ||
-            "Erro ao fazer o cadastro. Tente novamente."
-        );
-      } else {
-        // Caso contrário, exibe uma mensagem genérica
-        addError("Erro ao fazer o cadastro. Tente novamente.");
-      }
-
       // Exibe a mensagem de erro
       toast?.show({
-        message: fecthError,
+        message:
+          error.response?.data.mensagem || "Houve um erro ao fazer o cadastro.",
         type: "error",
         duration: 3000,
-        onClose: clearError,
       });
     },
   });

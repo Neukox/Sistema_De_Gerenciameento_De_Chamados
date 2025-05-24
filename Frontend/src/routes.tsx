@@ -12,13 +12,18 @@ import MainLayout from "@pages/MainLayout";
 import UserDashboardPage from "@pages/usuario/dashboard/page";
 import UserEmailTicketsPage from "@pages/usuario/chamados/email/page";
 import UserChatTicketsPage from "@pages/usuario/chamados/chat/page";
-import UserProfilePage from "@pages/usuario/perfil/page";
+import UserProfilePage from "@pages/perfil/page";
 import UserCreateTicketPage from "@pages/usuario/chamado/criar/page";
 import TicketInfoPage from "@pages/usuario/chamado/exibir/page";
 import EditTicketPage from "@pages/usuario/chamado/editar/page";
 import TicketChatPage from "@pages/usuario/chamado/chat/page";
 import AdminTicketChatPage from "@pages/admin/chamado/chat/page";
 import ProtectedPage from "@pages/Protected";
+import AdminDashboardPage from "@pages/admin/dashboard/page";
+import AdminChatTicketsPage from "@pages/admin/chamados/chat/page";
+import AdminEmailTicketsPage from "@pages/admin/chamados/email/page";
+import AdminTicketInfoPage from "@pages/admin/chamado/exibir/page";
+import AdminEditTicketPage from "@pages/admin/chamado/editar/page";
 
 /**
  * @description Configuração das rotas da aplicação utilizando o React Router.
@@ -84,8 +89,33 @@ const router = createBrowserRouter([
         errorElement: <ProtectedPage />,
         children: [
           {
+            path: "dashboard",
+            Component: AdminDashboardPage,
+          },
+          {
+            path: "chamados",
+            children: [
+              {
+                path: "email",
+                Component: AdminEmailTicketsPage,
+              },
+              {
+                path: "chat",
+                Component: AdminChatTicketsPage,
+              },
+            ],
+          },
+          {
             path: "chamado",
             children: [
+              {
+                path: ":id",
+                Component: AdminTicketInfoPage,
+              },
+              {
+                path: ":id/editar",
+                Component: AdminEditTicketPage,
+              },
               {
                 path: ":id/chat",
                 Component: AdminTicketChatPage,
