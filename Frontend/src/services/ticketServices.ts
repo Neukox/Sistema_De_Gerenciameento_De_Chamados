@@ -1,5 +1,5 @@
 import { api } from "../lib/api";
-import { Ticket } from "types/Ticket";
+import { Ticket, TicketStatusType } from "types/Ticket";
 
 export interface TicketResponse {
   message?: string;
@@ -12,6 +12,11 @@ export interface FetchTicketsResponse extends TicketResponse {
 
 export interface CreateTicketResponse extends TicketResponse {
   chamado_id?: number;
+}
+
+export interface ChangeStatusTicketRequest {
+  id: number;
+  status: TicketStatusType;
 }
 
 /**
@@ -138,5 +143,26 @@ export async function editTicket(
  */
 export async function cancelTicket(id: number): Promise<TicketResponse> {
   const response = await api.patch<TicketResponse>(`chamados/cancelar/${id}`);
+  return response.data;
+}
+
+/**
+ * @description Função para alterar o status de um chamado.
+ *
+ * Essa função faz uma requisição PATCH para a API e retorna uma mensagem de sucesso ou erro.
+ *
+ * @param {number} id - O ID do chamado a ter o status alterado.
+ * @param {string} status - O novo status do chamado.
+ * @returns {Promise<TicketResponse>} - A resposta da API contendo uma mensagem de sucesso ou erro.
+ */
+export async function changeTicketStatus(
+  data: ChangeStatusTicketRequest
+): Promise<TicketResponse> {
+  const response = await api.patch<TicketResponse>(
+    `chamados/status/${data.id}`,
+    {
+      status: data.status,
+    }
+  );
   return response.data;
 }
