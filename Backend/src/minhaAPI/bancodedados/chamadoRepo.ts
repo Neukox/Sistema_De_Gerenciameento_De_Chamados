@@ -84,7 +84,7 @@ export async function buscarChamadosPorId(
 ): Promise<ChamadoDBCompleto | undefined> {
   const db = await connectDB();
   const chamado = await db.get<ChamadoDBCompleto>(
-    "SELECT c.*, u.nome FROM chamados c JOIN usuarios u ON c.usuario_id = u.id WHERE c.id = ?",
+    "SELECT c.*, u.nome as usuarioNome FROM chamados c JOIN usuarios u ON c.usuario_id = u.id WHERE c.id = ?",
     [id]
   );
 
