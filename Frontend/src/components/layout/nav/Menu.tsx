@@ -6,6 +6,7 @@ import TicketIcon from "@assets/icons/Ticket";
 import NavMenuLink from "./Link";
 import useToggle from "@hooks/useToggle";
 import HamburguerMenuIcon from "@assets/icons/HamburgerMenu";
+import useUserInfo from "@hooks/useUserInfo";
 
 /**
  * @description Componente de Menu (Nav) para navegação.
@@ -17,6 +18,8 @@ import HamburguerMenuIcon from "@assets/icons/HamburgerMenu";
  * @returns {JSX.Element} O componente de Menu Lateral renderizado.
  * */
 export default function NavMenu() {
+  // Hook para pegar informações do usuário
+  const user = useUserInfo();
   // Estado para controlar a abertura e fechamento do menu
   const { toggleState: isOpen, toggle } = useToggle(false);
 
@@ -78,32 +81,64 @@ export default function NavMenu() {
         } fixed top-20 left-0 h-[calc(100vh_-_5rem)] bg-primary transition-transform duration-300 ease-in-out text-white p-4`}
         ref={navRef}
       >
-        <ul className="menu p-0 w-fit gap-2 font-medium">
-          <li>
-            <NavMenuLink to="/dashboard" onClickLink={onClickNavLink}>
-              <DashboardIcon className="w-6" />
-              <span>Dashboard</span>
-            </NavMenuLink>
-          </li>
-          <li>
-            <NavMenuLink to="/chamado/criar" onClickLink={onClickNavLink}>
-              <TicketIcon className="w-6" />
-              <span>Criar Chamado</span>
-            </NavMenuLink>
-          </li>
-          <li>
-            <NavMenuLink to="/chamados/email" onClickLink={onClickNavLink}>
-              <EmailIcon className="w-6" />
-              <span>Chamados por E-mail</span>
-            </NavMenuLink>
-          </li>
-          <li>
-            <NavMenuLink to="/chamados/chat" onClickLink={onClickNavLink}>
-              <ChatIcon className="w-6" />
-              <span>Chamados por Chat</span>
-            </NavMenuLink>
-          </li>
-        </ul>
+        {/* Menu de navegação (admins) */}
+        {user?.role === "admin" && (
+          <ul className="menu p-0 w-fit gap-2 font-medium">
+            <li>
+              <NavMenuLink to="admin/dashboard" onClickLink={onClickNavLink}>
+                <DashboardIcon className="w-6" />
+                <span>Dashboard</span>
+              </NavMenuLink>
+            </li>
+            <li>
+              <NavMenuLink
+                to="admin/chamados/email"
+                onClickLink={onClickNavLink}
+              >
+                <EmailIcon className="w-6" />
+                <span>Chamados por E-mail</span>
+              </NavMenuLink>
+            </li>
+            <li>
+              <NavMenuLink
+                to="admin/chamados/chat"
+                onClickLink={onClickNavLink}
+              >
+                <ChatIcon className="w-6" />
+                <span>Chamados por Chat</span>
+              </NavMenuLink>
+            </li>
+          </ul>
+        )}
+        {/* Menu de navegação (clientes) */}
+        {user?.role === "cliente" && (
+          <ul className="menu p-0 w-fit gap-2 font-medium">
+            <li>
+              <NavMenuLink to="/dashboard" onClickLink={onClickNavLink}>
+                <DashboardIcon className="w-6" />
+                <span>Dashboard</span>
+              </NavMenuLink>
+            </li>
+            <li>
+              <NavMenuLink to="/chamado/criar" onClickLink={onClickNavLink}>
+                <TicketIcon className="w-6" />
+                <span>Novo Chamado</span>
+              </NavMenuLink>
+            </li>
+            <li>
+              <NavMenuLink to="/chamados/email" onClickLink={onClickNavLink}>
+                <EmailIcon className="w-6" />
+                <span>Chamados por E-mail</span>
+              </NavMenuLink>
+            </li>
+            <li>
+              <NavMenuLink to="/chamados/chat" onClickLink={onClickNavLink}>
+                <ChatIcon className="w-6" />
+                <span>Chamados por Chat</span>
+              </NavMenuLink>
+            </li>
+          </ul>
+        )}
       </nav>
     </>
   );

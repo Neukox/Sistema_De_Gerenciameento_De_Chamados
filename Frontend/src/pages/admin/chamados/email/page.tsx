@@ -1,33 +1,25 @@
 import TicketCard from "@components/tickets/Card";
 import Search from "@components/ui/form/Search";
 import Select from "@components/ui/form/Select";
-import useUserInfo from "@hooks/useUserInfo";
 import useFilters from "@hooks/useFilters";
 import { useQuery } from "@tanstack/react-query";
-import {
-  FetchTicketsResponse,
-  fetchUserTickets,
-} from "@services/ticketServices";
+import { fetchTickets, FetchTicketsResponse } from "@services/ticketServices";
 import { AxiosError } from "axios";
 import Loading from "@components/ui/Loading";
 import FetchError from "@components/ui/FetchError";
 import NotFoundResource from "@components/ui/NotFound";
 
 /**
- * @description Página de Chamados por Chat do Cliente.
+ * @description Página de Chamados por Email do Administrador.
  *
- * Essa página exibe uma lista de chamados relacionados ao atendimento por chat.
- * O usuário pode filtrar os chamados por status e pesquisar por palavras-chave.
+ * Essa página exibe uma lista de chamados relacionados ao atendimento por e-mail.
+ * O administrador pode filtrar os chamados por status e pesquisar por palavras-chave.
  *
  * @component
  * @returns {JSX.Element} O componente da página renderizado.
  */
 
-export default function UserEmailTicketsPage() {
-  // Hook para obter informações do usuário
-  const user = useUserInfo();
-  // Converte o ID do usuário para um número
-  const userID = Number(user?.id);
+export default function AdminEmailTicketsPage() {
   // Hook para gerenciar filtros de pesquisa e status
   const { search, status, handleSearch, handleStatus } = useFilters();
   // Hook para buscar os chamados do usuário (por email)
@@ -35,9 +27,8 @@ export default function UserEmailTicketsPage() {
     FetchTicketsResponse,
     AxiosError<FetchTicketsResponse>
   >({
-    queryKey: ["user-tickets", { id: userID, search: search, status: status }],
-    queryFn: () => fetchUserTickets(userID, "", search, status),
-    enabled: !!userID,
+    queryKey: ["all-email-tickets", { search: search, status: status }],
+    queryFn: () => fetchTickets("email", search, status),
   });
 
   return (
@@ -75,7 +66,7 @@ export default function UserEmailTicketsPage() {
             <FetchError
               title="Erro as exibir os chamados"
               message={
-                error.response?.data?.message || error.response?.data?.error
+                error.response?.data.message || error.response?.data.error
               }
               action={refetch}
             />

@@ -3,11 +3,15 @@ import Search from "@components/ui/form/Search";
 import Select from "@components/ui/form/Select";
 import useFilters from "@hooks/useFilters";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUserTickets } from "@services/ticketServices";
+import {
+  FetchTicketsResponse,
+  fetchUserTickets,
+} from "@services/ticketServices";
 import useUserInfo from "@hooks/useUserInfo";
 import Loading from "@components/ui/Loading";
 import FetchError from "@components/ui/FetchError";
 import NotFoundResource from "@components/ui/NotFound";
+import { AxiosError } from "axios";
 
 /**
  * @description Página de Chamados por Chat do Cliente.
@@ -26,7 +30,10 @@ export default function UserChatTicketsPage() {
   // Hook para gerenciar filtros de pesquisa e status
   const { search, status, handleSearch, handleStatus } = useFilters();
   // Hook para buscar os chamados do usuário (por chat)
-  const { data, isPending, error, refetch } = useQuery({
+  const { data, isPending, error, refetch } = useQuery<
+    FetchTicketsResponse,
+    AxiosError<FetchTicketsResponse>
+  >({
     queryKey: ["user-tickets", { id: userID, search: search, status: status }],
     queryFn: () => fetchUserTickets(userID, "chat", search, status),
     enabled: !!userID,
@@ -66,7 +73,9 @@ export default function UserChatTicketsPage() {
           {error && (
             <FetchError
               title="Erro as exibir os chamados"
-              message={error.message}
+              message={
+                error.response?.data?.message || error.response?.data?.error
+              }
               action={refetch}
             />
           )}

@@ -14,7 +14,7 @@ export function roleBasedLoader({ request }: { request: Request }) {
 
   if (user.role === "cliente" && url.pathname === "/") {
     return redirect("/dashboard");
-  } else if (user.role === "admin" && url.pathname.startsWith("/admin")) {
+  } else if (user.role === "admin" && url.pathname === "/") {
     return redirect("/admin/dashboard");
   }
 

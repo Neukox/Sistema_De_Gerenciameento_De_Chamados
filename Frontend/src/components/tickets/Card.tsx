@@ -2,6 +2,7 @@ import { Ticket } from "types/Ticket";
 import StatusTag from "./Status";
 import ServiceTypeTag from "./ServiceType";
 import { Link } from "react-router";
+import useUserInfo from "@hooks/useUserInfo";
 
 /**
  * @description Componente de cartão para exibir informações de um chamado.
@@ -14,14 +15,15 @@ import { Link } from "react-router";
  * @returns {JSX.Element} O componente de cartão renderizado.
  */
 export default function TicketCard({ data }: { data: Ticket }) {
+  // Hook para acessar informações do usuário
+  const user = useUserInfo();
+
   return (
     <div className="card card-border min-h-72 xs:min-h-60 shadow-sm bg-base-100 w-full p-4 gap-4">
       <div className="flex flex-col xs:flex-row justify-between gap-x-4 gap-y-1">
         <span className="font-semibold">Chamado #{data.id}</span>
         {data.data_encerramento ? (
-          <span>
-            Encerrado em: {data.data_encerramento}
-          </span>
+          <span>Encerrado em: {data.data_encerramento}</span>
         ) : (
           <span>Criado em: {data.data_criacao}</span>
         )}
@@ -38,7 +40,11 @@ export default function TicketCard({ data }: { data: Ticket }) {
           <StatusTag type={data.status} />
         </div>
         <Link
-          to={`/chamado/${data.id}`}
+          to={
+            user?.role === "admin"
+              ? `/admin/chamado/${data.id}`
+              : `/chamado/${data.id}`
+          }
           className="btn btn-primary self-stretch xs:self-auto"
         >
           Ver mais

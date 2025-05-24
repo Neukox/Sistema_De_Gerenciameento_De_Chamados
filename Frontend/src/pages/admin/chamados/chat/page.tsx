@@ -1,49 +1,39 @@
 import TicketCard from "@components/tickets/Card";
 import Search from "@components/ui/form/Search";
 import Select from "@components/ui/form/Select";
-import useUserInfo from "@hooks/useUserInfo";
 import useFilters from "@hooks/useFilters";
 import { useQuery } from "@tanstack/react-query";
-import {
-  FetchTicketsResponse,
-  fetchUserTickets,
-} from "@services/ticketServices";
-import { AxiosError } from "axios";
+import { fetchTickets, FetchTicketsResponse } from "@services/ticketServices";
 import Loading from "@components/ui/Loading";
 import FetchError from "@components/ui/FetchError";
 import NotFoundResource from "@components/ui/NotFound";
+import { AxiosError } from "axios";
 
 /**
- * @description Página de Chamados por Chat do Cliente.
+ * @description Página de Chamados por Chat do Administrador.
  *
  * Essa página exibe uma lista de chamados relacionados ao atendimento por chat.
- * O usuário pode filtrar os chamados por status e pesquisar por palavras-chave.
+ * O administrador pode filtrar os chamados por status e pesquisar por palavras-chave.
  *
  * @component
  * @returns {JSX.Element} O componente da página renderizado.
  */
-
-export default function UserEmailTicketsPage() {
-  // Hook para obter informações do usuário
-  const user = useUserInfo();
-  // Converte o ID do usuário para um número
-  const userID = Number(user?.id);
+export default function AdminChatTicketsPage() {
   // Hook para gerenciar filtros de pesquisa e status
   const { search, status, handleSearch, handleStatus } = useFilters();
-  // Hook para buscar os chamados do usuário (por email)
+  // Hook para buscar os chamados do usuário (por chat)
   const { data, isPending, error, refetch } = useQuery<
     FetchTicketsResponse,
     AxiosError<FetchTicketsResponse>
   >({
-    queryKey: ["user-tickets", { id: userID, search: search, status: status }],
-    queryFn: () => fetchUserTickets(userID, "", search, status),
-    enabled: !!userID,
+    queryKey: ["all-chat-tickets", { search: search, status: status }],
+    queryFn: () => fetchTickets("chat", search, status),
   });
 
   return (
     <div className="w-full bg-base-200 flex justify-center min-h-[calc(100vh-5.0625rem)]">
       <div className="w-full max-w-screen-xl mb-8 px-4">
-        <h1 className="my-6">Meus Chamados por E-mail</h1>
+        <h1 className="my-6">Meus Chamados por Chat</h1>
         <div className="flex flex-col xs:flex-row gap-4 justify-between bg-base-20 mb-6">
           <Search
             placeholder="Pesquisar chamados"
@@ -84,7 +74,7 @@ export default function UserEmailTicketsPage() {
           {!isPending && !data?.chamados?.length && (
             <NotFoundResource message="Nenhum chamado encontrado" />
           )}
-          {/* Renderiza os cartões de chamados */}
+          {/* Exibe os chamados encontrados */}
           {data?.chamados &&
             data.chamados.map((ticket) => (
               <TicketCard key={ticket.id} data={ticket} />

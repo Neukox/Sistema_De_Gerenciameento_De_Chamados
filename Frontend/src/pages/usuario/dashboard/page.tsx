@@ -32,7 +32,7 @@ export default function UserDashboardPage() {
   // Hook para buscar os chamados do usuário
   const { data, isPending, error, refetch } = useQuery<
     FetchTicketsResponse,
-    AxiosError
+    AxiosError<FetchTicketsResponse>
   >({
     queryKey: ["user-tickets", { id: userID, search: search, status: status }],
     queryFn: () => fetchUserTickets(userID, "", search, status),
@@ -73,7 +73,9 @@ export default function UserDashboardPage() {
           {error && (
             <FetchError
               title="Erro as exibir os chamados"
-              message={error.message}
+              message={
+                error.response?.data?.message || error.response?.data?.error
+              }
               action={refetch}
             />
           )}
