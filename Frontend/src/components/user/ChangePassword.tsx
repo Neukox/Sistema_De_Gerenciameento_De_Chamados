@@ -1,7 +1,6 @@
 import Form from "@components/ui/form";
 import { useToast } from "@context/ToastContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useError from "@hooks/useErrors";
 import {
   ChangeUserPasswordData,
   changeUserPasswordSchema,
@@ -9,7 +8,7 @@ import {
 import { changeUserPassword, UserResponse } from "@services/userServices";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { isAxiosError } from "axios";
+import { AxiosError } from "axios";
 
 /**
  * @description Componente de formulário para alterar a senha do usuário.
@@ -22,8 +21,6 @@ import { isAxiosError } from "axios";
  * @return {JSX.Element} O componente de formulário de alteração de senha renderizado.
  * */
 export default function ChangeUserPasswordForm({ userId }: { userId: number }) {
-  // Hook para gerenciar erros
-  const { error: fetchError, addError, clearError } = useError();
   // Hook para exibir mensagens de toast
   const toast = useToast();
 
@@ -37,7 +34,12 @@ export default function ChangeUserPasswordForm({ userId }: { userId: number }) {
     resolver: zodResolver(changeUserPasswordSchema),
   });
 
-  const mutation = useMutation<UserResponse, Error, ChangeUserPasswordData>({
+  // Hook para fazer atualização de senha
+  const mutation = useMutation<
+    UserResponse,
+    AxiosError<UserResponse>,
+    ChangeUserPasswordData
+  >({
     mutationFn: (data) => changeUserPassword(userId, data.password),
     onSuccess: (data) => {
       // Limpa o formulário após o sucesso
@@ -46,22 +48,15 @@ export default function ChangeUserPasswordForm({ userId }: { userId: number }) {
       toast?.show({
         message: data.message,
         type: "success",
-        duration: 3000,
+        duration: 2000,
       });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        addError(error.response?.data.message || error.response?.data.error);
-      } else {
-        addError("Erro ao alterar a senha");
-      }
-
       // Exibe uma mensagem de erro
       toast?.show({
-        message: fetchError,
+        message: error.response?.data?.message || error.response?.data?.error,
         type: "error",
         duration: 3000,
-        onClose: clearError,
       });
     },
   });
@@ -101,7 +96,9 @@ export default function ChangeUserPasswordForm({ userId }: { userId: number }) {
           <Form.Error>{errors.confirmPassword.message}</Form.Error>
         )}
       </Form.Field>
-      <Form.Submit className="xs:self-end">Alterar Senha</Form.Submit>
+      <Form.Submit className="xs:self-end" disabled={mutation.isPending}>
+        Alterar Senha
+      </Form.Submit>
     </form>
   );
 }

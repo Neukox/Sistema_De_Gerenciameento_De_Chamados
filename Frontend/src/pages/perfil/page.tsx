@@ -3,7 +3,7 @@ import Loading from "@components/ui/Loading";
 import ChangePasswordForm from "@components/user/ChangePassword";
 import EditUserForm from "@components/user/Edit";
 import useUserInfo from "@hooks/useUserInfo";
-import getUserInfo from "@services/userServices";
+import getUserInfo, { UserResponse } from "@services/userServices";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { User } from "types/User";
@@ -20,7 +20,10 @@ export default function UserProfilePage() {
   // Converte o ID do usuário para um número
   const id = Number(user?.id);
   // Hook para buscar informações do usuário
-  const { data, isLoading, error, refetch } = useQuery<User, AxiosError>({
+  const { data, isLoading, error, refetch } = useQuery<
+    User,
+    AxiosError<UserResponse>
+  >({
     queryKey: ["user", id],
     queryFn: () => getUserInfo(id),
     enabled: !!id,
@@ -34,9 +37,7 @@ export default function UserProfilePage() {
     return (
       <FetchError
         title="Não foi possível carregar as informações do usuário"
-        message={
-          error?.status === 404 ? "Usuário não encontrado" : error.message
-        }
+        message={error.response?.data?.error || error.response?.data?.message}
         action={refetch}
       />
     );
@@ -48,10 +49,15 @@ export default function UserProfilePage() {
           <h1 className="mb-4">Meu perfil</h1>
           <div className="flex flex-col gap-4">
             <div className="w-full bg-base-200 rounded-lg shadow-md p-6 flex flex-col gap-12">
-              <div>
-                <h2 className="text-2xl font-bold mb-4">
-                  Informações do Usuário
-                </h2>
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col xs:flex-row justify-between xs:items-center gap-4">
+                  <h2 className="text-2xl font-bold">Informações do Usuário</h2>
+                  {data?.role === "admin" && (
+                    <span className="badge badge-primary font-semibold">
+                      Administrador
+                    </span>
+                  )}
+                </div>
                 <div className="flex flex-col sm:flex-row gap-2 text-base">
                   <p className="flex-1">Nome: {data?.name}</p>
                   <p className="flex-1">Email: {data?.email}</p>

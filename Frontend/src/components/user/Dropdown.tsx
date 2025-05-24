@@ -26,13 +26,13 @@ export default function UserDropdown() {
       </button>
 
       <ul
-        className="dropdown-content menu p-2 z-1 w-60 bg-base-200 rounded-sm shadow-sm mt-3 gap-2 text-base-content"
+        className="dropdown-content menu p-2 z-1 min-w-60 bg-base-200 rounded-sm shadow-sm mt-3 gap-2 text-base-content"
         tabIndex={0}
       >
-        <li className="menu-title flex text-base-content justify-between gap-2">
+        <li className="menu-title flex flex-row text-base-content justify-between gap-2">
           {user?.name}
           {user?.role === "admin" && (
-            <span className="badge badge-primary">{user?.role}</span>
+            <span className="badge badge-primary">Admin</span>
           )}
         </li>
         <li>

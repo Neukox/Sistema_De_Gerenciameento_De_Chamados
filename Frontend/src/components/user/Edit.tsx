@@ -7,8 +7,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { editUserInfo, UserResponse } from "@services/userServices";
-import { isAxiosError } from "axios";
-import useError from "@hooks/useErrors";
+import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
 
 type EditUserFormProps = {
@@ -32,8 +31,6 @@ export default function EditUserForm({
   userID,
   userInfoToEdit,
 }: EditUserFormProps) {
-  // Hook para gerenciar o estado do erro
-  const { error: fetchError, addError, clearError } = useError();
   // Hook para exibir mensagens de toast
   const toast = useToast();
   //Hook para gerenciar o estado do formulário
@@ -53,32 +50,26 @@ export default function EditUserForm({
   const queryClient = useQueryClient();
 
   //Hook para enviar novas informações do usuário
-  const mutation = useMutation<UserResponse, Error, EditUserInfoData>({
+  const mutation = useMutation<
+    UserResponse,
+    AxiosError<UserResponse>,
+    EditUserInfoData
+  >({
     mutationFn: (data) => editUserInfo(userID, data),
     onSuccess: (data) => {
       toast?.show({
         message: data.message,
         type: "success",
         duration: 2000,
-        onClose: () => {
-          // Invalida as queries relacionadas ao usuário para garantir que os dados sejam atualizados
-          queryClient.invalidateQueries({ queryKey: ["user", userID] });
-          clearError();
-        },
       });
+
+      queryClient.invalidateQueries({ queryKey: ["user", userID] });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        addError(error.response?.data.message || error.response?.data.error);
-      } else {
-        addError("Erro ao editar usuário");
-      }
-
       toast?.show({
-        message: fetchError,
+        message: error.response?.data.message || error.response?.data.error,
         type: "error",
         duration: 2000,
-        onClose: clearError,
       });
     },
   });
@@ -119,7 +110,9 @@ export default function EditUserForm({
         />
         {errors.email && <Form.Error>{errors.email.message}</Form.Error>}
       </Form.Field>
-      <Form.Submit className="xs:self-end">Salvar</Form.Submit>
+      <Form.Submit className="xs:self-end" disabled={mutation.isPending}>
+        Salvar
+      </Form.Submit>
     </form>
   );
 }
