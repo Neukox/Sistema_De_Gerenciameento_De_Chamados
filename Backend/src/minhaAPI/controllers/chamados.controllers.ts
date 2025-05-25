@@ -324,6 +324,15 @@ async function cancel(req: Request, res: Response): Promise<void> {
   }
 }
 
+/**
+ * Envia uma mensagem de e-mail para o usuário associado ao chamado.
+ *
+ * @function sendMessage
+ * @param {Request} req - Objeto de solicitação do Express.
+ * @param {Response} res - Objeto de resposta do Express.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
+ * @throws {Error} - Lança um erro se ocorrer um problema ao enviar a mensagem.
+ * */
 async function sendMessage(req: Request, res: Response): Promise<void> {
   const { usuario_id: usuarioID, mensagem } = req.body;
   const chamadoID = Number(req.params.id);

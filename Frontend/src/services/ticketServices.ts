@@ -19,6 +19,12 @@ export interface ChangeStatusTicketRequest {
   status: TicketStatusType;
 }
 
+export interface SendMessageTicketRequest {
+  id: number;
+  usuario_id: number;
+  mensagem: string;
+}
+
 /**
  * @description Função para buscar todos os chamados.
  *
@@ -162,6 +168,29 @@ export async function changeTicketStatus(
     `chamados/status/${data.id}`,
     {
       status: data.status,
+    }
+  );
+  return response.data;
+}
+
+/**
+ * @description Função para enviar uma mensagem sobre um chamado.
+ *
+ * Essa função faz uma requisição POST para a API e retorna uma mensagem de sucesso ou erro.
+ *
+ * @param {number} id - O ID do chamado ao qual a mensagem será adicionada.
+ * @param {string} mensagem - A mensagem a ser adicionada ao chamado.
+ * @returns {Promise<TicketResponse>} - A resposta da API contendo uma mensagem de sucesso ou erro.
+ */
+
+export async function sendMessage(
+  data: SendMessageTicketRequest
+): Promise<TicketResponse> {
+  const response = await api.post<TicketResponse>(
+    `chamados/mensagem/${data.id}`,
+    {
+      usuario_id: data.usuario_id,
+      mensagem: data.mensagem,
     }
   );
   return response.data;

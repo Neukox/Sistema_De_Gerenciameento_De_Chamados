@@ -9,6 +9,7 @@ import FetchError from "@components/ui/FetchError";
 import { AxiosError } from "axios";
 import { useRef } from "react";
 import ChangeStatusTicket from "@components/tickets/ChangeStatus";
+import SendMessage from "@components/email/Send";
 
 /**
  * @description Página de informações do chamado (admin).
@@ -21,8 +22,9 @@ import ChangeStatusTicket from "@components/tickets/ChangeStatus";
  * */
 
 export default function AdminTicketInfoPage() {
-  // ref para o modal de alteração de status
-  const dialog = useRef<HTMLDialogElement>(null);
+  // ref para o modal de alteração de status e envio de email
+  const changeStatusDialog = useRef<HTMLDialogElement>(null);
+  const sendMessageDialog = useRef<HTMLDialogElement>(null);
   // Obtém os parâmetros da URL, incluindo o ID do chamado
   const params = useParams();
   // Hook para navegar entre páginas
@@ -110,10 +112,19 @@ export default function AdminTicketInfoPage() {
                   Entrar em chat
                 </button>
               )}
+              {ticket?.tipo_atendimento === "email" && (
+                <button
+                  className="btn btn-accent text-white disabled:bg-accent/65! disabled:text-white/50"
+                  onClick={() => sendMessageDialog.current?.showModal()}
+                  disabled={isClosed}
+                >
+                  Enviar E-mail
+                </button>
+              )}
               <button
                 className="btn btn-primary disabled:bg-primary/65! disabled:text-primary-content/50"
                 disabled={isClosed}
-                onClick={() => dialog.current?.showModal()}
+                onClick={() => changeStatusDialog.current?.showModal()}
               >
                 Alterar Status
               </button>
@@ -128,11 +139,20 @@ export default function AdminTicketInfoPage() {
           </div>
         </div>
       </div>
+      {/* Modal para alterar o status do chamado */}
       <ChangeStatusTicket
-        ref={dialog as React.RefObject<HTMLDialogElement>}
+        ref={changeStatusDialog as React.RefObject<HTMLDialogElement>}
         ticketID={ticket?.id as number}
         ticketStatus={ticket?.status}
       />
+      {/* Modal para enviar email */}
+      {ticket?.tipo_atendimento === "email" && (
+        <SendMessage
+          ref={sendMessageDialog as React.RefObject<HTMLDialogElement>}
+          ticketID={ticket?.id}
+          userID={ticket?.usuario_id}
+        />
+      )}
     </>
   );
 }
