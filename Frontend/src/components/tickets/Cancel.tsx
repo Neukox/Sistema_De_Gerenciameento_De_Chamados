@@ -50,7 +50,7 @@ export default function CancelTicket({ ticketID, ref }: CancelTicketProps) {
     onError: (error) => {
       // Adiciona um toast de erro
       toast?.show({
-        message: error.message,
+        message: error.response?.data.message || "Erro ao cancelar chamado",
         type: "error",
         duration: 2000,
       });

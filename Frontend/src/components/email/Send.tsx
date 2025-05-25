@@ -56,7 +56,7 @@ export default function SendMessage({
     onError: (error) => {
       // Adiciona um toast de erro
       toast?.show({
-        message: error.message,
+        message: error.response?.data.message || "Erro ao enviar mensagem",
         type: "error",
         duration: 2000,
         onClose: reset,

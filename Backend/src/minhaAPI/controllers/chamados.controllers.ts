@@ -9,7 +9,11 @@ import {
   inserirChamado,
 } from "../bancodedados/chamadoRepo";
 import formatDate from "../utils/dateConverter";
-import { sendMessageEmail, sendNotificationToAdmins } from "../email/send";
+import {
+  sendMessageEmail,
+  sendNotificationToAdmins,
+  sendStatusChangeEmail,
+} from "../email/send";
 import { buscarUsuarioPorId } from "../bancodedados/usuarioRepo";
 
 /**
@@ -283,8 +287,10 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
     // Enviar e-mail de atualização de status
     const usuario = await buscarUsuarioPorId(chamado.usuario_id as number);
 
+    console.log("Usuario:", usuario);
+
     if (usuario) {
-      await sendMessageEmail(usuario.email, {
+      await sendStatusChangeEmail(usuario.email, {
         user_name: usuario.nome,
         ticket_title: chamado.titulo,
         ticket_status: status,

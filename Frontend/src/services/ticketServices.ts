@@ -17,6 +17,7 @@ export interface CreateTicketResponse extends TicketResponse {
 export interface ChangeStatusTicketRequest {
   id: number;
   status: TicketStatusType;
+  mensagem?: string;
 }
 
 export interface SendMessageTicketRequest {
@@ -168,6 +169,7 @@ export async function changeTicketStatus(
     `chamados/status/${data.id}`,
     {
       status: data.status,
+      mensagem: data.mensagem,
     }
   );
   return response.data;

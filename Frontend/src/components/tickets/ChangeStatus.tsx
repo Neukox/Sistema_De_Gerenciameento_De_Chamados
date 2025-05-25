@@ -10,11 +10,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Form from "@components/ui/form";
 import { AxiosError } from "axios";
 import { TicketStatusType } from "types/Ticket";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 type CancelTicketProps = {
   ticketID: number;
   ticketStatus?: string;
   ref: React.RefObject<HTMLDialogElement>;
+};
+
+type ChangeStatusTicketForm = {
+  status: TicketStatusType;
+  mensagem: string;
 };
 
 /**
@@ -36,6 +43,18 @@ export default function ChangeStatusTicket({
 }: CancelTicketProps) {
   // Hook para gerenciar toasts
   const toast = useToast();
+  // Hook para gerenciar o formulário
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ChangeStatusTicketForm>({
+    defaultValues: {
+      status: ticketStatus as TicketStatusType,
+      mensagem: "",
+    },
+  });
   // Hook para gerenciar o cache de tickets
   const queryClient = useQueryClient();
   // Hook para gerenciar a mutação de cancelamento de ticket
@@ -60,7 +79,7 @@ export default function ChangeStatusTicket({
     onError: (error) => {
       // Adiciona um toast de erro
       toast?.show({
-        message: error.message,
+        message: error.response?.data.message || "Erro ao alterar status",
         type: "error",
         duration: 2000,
       });
@@ -70,31 +89,32 @@ export default function ChangeStatusTicket({
     },
   });
 
+  // Efeito para resetar o formulário quando o modal é aberto
+  useEffect(() => {
+    reset({
+      status: ticketStatus as TicketStatusType,
+      mensagem: "",
+    });
+  }, [ticketStatus, ref, reset]);
+
   // Função para fechar o modali
   const close = () => {
     ref?.current?.close();
   };
 
   // Função para realizar o submit do formulário
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // Previne o comportamento padrão do formulário
-    event.preventDefault();
-    //Pega os dados do formulário
-    const formData = new FormData(event.currentTarget);
-    // Pega o status do chamado
-    const status = formData.get("status") as TicketStatusType;
-    // Prepara os dados para a mutação
-    const data: ChangeStatusTicketRequest = {
+  const onSubmit = (data: ChangeStatusTicketForm) => {
+    // Chama a mutação para alterar o status do chamado
+    mutation.mutate({
       id: ticketID,
-      status: status,
-    };
-    // Executa a mutação
-    mutation.mutate(data);
+      status: data.status,
+      mensagem: data.mensagem,
+    });
   };
 
   return (
     <dialog className="modal" ref={ref}>
-      <div className="modal-box relative">
+      <div className="modal-box max-w-160 relative">
         <button
           type="button"
           className="btn btn-sm btn-ghost btn-circle absolute right-2 top-2"
@@ -102,17 +122,18 @@ export default function ChangeStatusTicket({
         >
           <CloseIcon className="w-5" />
         </button>
-        <form method="dialog" onSubmit={handleSubmit}>
+        <form method="dialog" onSubmit={handleSubmit(onSubmit)}>
           <h3 className="font-bold text-lg mb-4">Alterar status do chamado</h3>
-          <Form.Field>
+          <Form.Field className="mb-4">
             <Form.Label htmlFor="status" className="text-base-content">
               Status
             </Form.Label>
             <Form.Select
               id="status"
-              name="status"
               className="w-full shadow-md"
-              defaultValue={ticketStatus}
+              {...register("status", {
+                required: "Campo obrigatório",
+              })}
             >
               <option value="aberto">Aberto</option>
               <option value="em andamento">Em Andamento</option>
@@ -121,6 +142,18 @@ export default function ChangeStatusTicket({
               <option value="fechado">Fechado</option>
               <option value="cancelado">Cancelado</option>
             </Form.Select>
+            {errors.status && <Form.Error>{errors.status.message}</Form.Error>}
+          </Form.Field>
+          <Form.Field>
+            <Form.Label htmlFor="mensagem" className="text-base-content">
+              Mensagem
+            </Form.Label>
+            <Form.Textarea
+              id="mensagem"
+              placeholder="Digite sua mensagem aqui..."
+              className="w-full h-40 bg-base-200"
+              {...register("mensagem", { required: false })}
+            />
           </Form.Field>
           <div className="modal-action">
             <Submit className="btn btn-primary" disabled={mutation.isPending}>
