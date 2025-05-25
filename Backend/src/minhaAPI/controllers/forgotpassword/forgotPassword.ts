@@ -1,6 +1,6 @@
 import connectDB from "../../bancodedados/bancoDeDados";
 import { generateToken } from "../../utils/JWT";
-import { sendEmail } from "../../services/emailService";
+import { sendRecoverPasswordEmail } from "../../email/send";
 
 // Função para enviar redefinição de senha pelo email
 export async function forgotPassword(email: string): Promise<void> {
@@ -14,10 +14,10 @@ export async function forgotPassword(email: string): Promise<void> {
 
   const token = generateToken({ email }, "15m");
 
-  await sendEmail(
-    "gabrielcfonline0900@gmail.com",
-    email,
-    "Redefinição de Senha",
-    `Clique no link para redefinir sua senha: http://localhost:5173/redefinir-senha?token=${token}`
-  );
+  const url = `${process.env.CLIENT_URL}/redefinir-senha?token=${token}`;
+
+  await sendRecoverPasswordEmail(email, {
+    name: user.nome,
+    url,
+  });
 }
