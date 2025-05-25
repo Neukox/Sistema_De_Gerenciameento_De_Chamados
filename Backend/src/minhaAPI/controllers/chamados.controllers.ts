@@ -9,7 +9,8 @@ import {
   inserirChamado,
 } from "../bancodedados/chamadoRepo";
 import formatDate from "../utils/dateConverter";
-import { sendNotificationToAdmins } from "../email/send";
+import { sendMessageEmail, sendNotificationToAdmins } from "../email/send";
+import { buscarUsuarioPorId } from "../bancodedados/usuarioRepo";
 
 /**
  * Controller para gerenciar chamados.
@@ -323,6 +324,61 @@ async function cancel(req: Request, res: Response): Promise<void> {
   }
 }
 
+async function sendMessage(req: Request, res: Response): Promise<void> {
+  const { usuario_id: usuarioID, mensagem } = req.body;
+  const chamadoID = Number(req.params.id);
+
+  if (!usuarioID || !mensagem) {
+    res.status(400).json({ message: "Dados inválidos" });
+    return;
+  }
+
+  try {
+    const chamado = await buscarChamadosPorId(chamadoID);
+
+    if (!chamado) {
+      res.status(404).json({ message: "Chamado não encontrado" });
+      return;
+    }
+
+    if (chamado.tipo_atendimento !== "email") {
+      res.status(403).json({
+        message:
+          "Este chamado não têm permissão para enviar mensagens de email.",
+      });
+      return;
+    }
+
+    if (["fechado", "cancelado"].includes(chamado.status as string)) {
+      res.status(400).json({ message: "Chamado já encerrado ou cancelado" });
+      return;
+    }
+
+    const usuario = await buscarUsuarioPorId(usuarioID as number);
+
+    if (!usuario) {
+      res.status(404).json({ message: "Usuário não encontrado" });
+      return;
+    }
+
+    if (Number(usuario.id) !== Number(chamado.usuario_id)) {
+      res.status(403).json({ message: "Usuário não autorizado" });
+      return;
+    }
+
+    await sendMessageEmail(usuario.email, {
+      user_name: usuario.nome,
+      ticket_title: chamado.titulo,
+      message: mensagem,
+    });
+
+    res.status(200).json({ message: "Mensagem enviada com sucesso" });
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao enviar mensagem" });
+    console.error("Erro ao enviar mensagem:", error);
+  }
+}
+
 export default {
   getAll,
   getById,
@@ -331,4 +387,5 @@ export default {
   update,
   updateStatus,
   cancel,
+  sendMessage,
 };

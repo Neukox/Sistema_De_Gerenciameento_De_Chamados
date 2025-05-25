@@ -30,6 +30,13 @@ router.get(
 // Rota para criar um novo chamado
 router.post("/", autenticate, Controller.create);
 
+// Rota para enviar um e-mail de mensagem para o usuário sobre um chamado
+router.post(
+  "/mensagem/:id",
+  [autenticate, validateIdParam],
+  Controller.sendMessage
+);
+
 // Rota para atualizar um chamado
 router.put("/:id", [autenticate, validateIdParam], Controller.update);
 
