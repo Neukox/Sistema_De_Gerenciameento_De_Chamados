@@ -19,7 +19,7 @@ export default function TicketCard({ data }: { data: Ticket }) {
   const user = useUserInfo();
 
   return (
-    <div className="card card-border min-h-72 xs:min-h-60 shadow-sm bg-base-100 w-full p-4 gap-4">
+    <div className="card card-border min-h-72 xs:min-h-60 shadow-sm bg-base-100 dark:bg-base-200 w-full p-4 gap-4">
       <div className="flex flex-col xs:flex-row justify-between gap-x-4 gap-y-1">
         <span className="font-semibold">Chamado #{data.id}</span>
         {data.data_encerramento ? (

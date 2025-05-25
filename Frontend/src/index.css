@@ -9,7 +9,7 @@
     * O breakpoint personalizado é definido como 28.5rem (456px).
 */
 @plugin "daisyui/theme" {
-  name: "neukox";
+  name: "light";
   default: true;
   prefersdark: false;
   color-scheme: light;
@@ -27,6 +27,25 @@
   --color-success: oklch(81.6% 56.75% 143.335);
   --color-warning: oklch(91.9% 47.75% 107.691);
   --color-error: oklch(93.3% 49.25% 24.658);
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: oklch(0% 0% 89.876);
+  --color-base-200: oklch(19% 0% 89.876);
+  --color-base-300: oklch(25% 0% 89.876);
+  --color-gradient-from: oklch(0% 0% 89.876);
+  --color-gradient-to: oklch(0% 0% 89.876);
+  --color-primary: oklch(54% 29.25% 237.751);
+  --color-secondary: oklch(33.4% 25.25% 234.873);
+  --color-accent: oklch(67.1% 37.25% 238.737);
+  --color-neutral: oklch(62.5% 25.25% 227.536);
+  --color-info: oklch(77.6% 37.25% 226.595);
+  --color-success: oklch(81.6% 56.75% 143.335);
+  --color-warning: oklch(91.9% 47.75% 107.691);
 }
 
 @theme {

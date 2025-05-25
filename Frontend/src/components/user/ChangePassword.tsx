@@ -71,9 +71,7 @@ export default function ChangeUserPasswordForm({ userId }: { userId: number }) {
       onSubmit={handleSubmit(onChangePassword)}
     >
       <Form.Field className="flex flex-col flex-1">
-        <Form.Label htmlFor="password" className="text-black">
-          Nova Senha
-        </Form.Label>
+        <Form.Label htmlFor="password">Nova Senha</Form.Label>
         <Form.Password
           id="password"
           placeholder="Digite a sua nova senha"
@@ -83,9 +81,7 @@ export default function ChangeUserPasswordForm({ userId }: { userId: number }) {
         {errors.password && <Form.Error>{errors.password.message}</Form.Error>}
       </Form.Field>
       <Form.Field className="flex flex-col flex-1">
-        <Form.Label htmlFor="confirmPassword" className="text-black">
-          Confirmar Nova Senha
-        </Form.Label>
+        <Form.Label htmlFor="confirmPassword">Confirmar Nova Senha</Form.Label>
         <Form.Password
           id="confirmPassword"
           placeholder="Confirme a nova senha"

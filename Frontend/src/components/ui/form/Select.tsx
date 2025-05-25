@@ -27,7 +27,7 @@ export default function Select({
   return (
     <div className={`${className} relative text-sm`}>
       <select
-        className="appearance-none p-2 w-full h-full bg-base-100 rounded-none peer border-b-2 border-b-secondary hover:border-accent focus:outline-none focus:border-accent"
+        className="appearance-none p-2 w-full h-full bg-base-100 dark:bg-base-200 rounded-none peer border-b-2 border-b-secondary hover:border-accent focus:outline-none focus:border-accent"
         disabled={disabled}
         {...rest}
       >

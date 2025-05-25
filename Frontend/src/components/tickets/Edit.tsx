@@ -96,7 +96,7 @@ export default function EditTicketForm({
     <>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onEdit)}>
         <Form.Field className="flex flex-col">
-          <Form.Label htmlFor="titulo" className="text-black">
+          <Form.Label htmlFor="titulo">
             Título
           </Form.Label>
           <Form.Input
@@ -110,7 +110,7 @@ export default function EditTicketForm({
         </Form.Field>
 
         <Form.Field className="flex flex-col">
-          <Form.Label htmlFor="descricao" className="text-black">
+          <Form.Label htmlFor="descricao">
             Descrição
           </Form.Label>
           <Form.Textarea

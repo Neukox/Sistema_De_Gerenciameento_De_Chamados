@@ -20,7 +20,10 @@ type InputProps = {
 
 export default function Label({ htmlFor, children, className }: InputProps) {
   return (
-    <label htmlFor={htmlFor} className={`label mb-2 font-bold ${className}`}>
+    <label
+      htmlFor={htmlFor}
+      className={`label mb-2 font-bold text-base-content ${className}`}
+    >
       {children}
     </label>
   );

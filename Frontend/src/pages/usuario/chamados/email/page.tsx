@@ -36,19 +36,19 @@ export default function UserEmailTicketsPage() {
     AxiosError<FetchTicketsResponse>
   >({
     queryKey: ["user-tickets", { id: userID, search: search, status: status }],
-    queryFn: () => fetchUserTickets(userID, "", search, status),
+    queryFn: () => fetchUserTickets(userID, "email", search, status),
     enabled: !!userID,
   });
 
   return (
-    <div className="w-full bg-base-200 flex justify-center min-h-[calc(100vh-5.0625rem)]">
+    <div className="w-full bg-base-200 dark:bg-base-100 flex justify-center min-h-[calc(100vh-5.0625rem)]">
       <div className="w-full max-w-screen-xl mb-8 px-4">
         <h1 className="my-6">Meus Chamados por E-mail</h1>
         <div className="flex flex-col xs:flex-row gap-4 justify-between bg-base-20 mb-6">
           <Search
             placeholder="Pesquisar chamados"
             onChange={handleSearch}
-            className="w-full xs:max-w-2xs"
+            className="dark:bg-base-200 w-full xs:max-w-2xs"
           />
           <Select
             defaultValue=""

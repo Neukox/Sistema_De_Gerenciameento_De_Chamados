@@ -67,9 +67,7 @@ export default function ChatContainer() {
       </div>
       <form className="flex gap-4" onSubmit={handleSubmit}>
         <Field className="flex-1">
-          <Label htmlFor="message" className="text-black">
-            Mensagem
-          </Label>
+          <Label htmlFor="message">Mensagem</Label>
           <Input
             type="text"
             id="message"

@@ -103,7 +103,7 @@ export default function CreateTicketPage() {
               <div className="flex gap-4 mb-2">
                 <label
                   htmlFor="tipo_atendimento_email"
-                  className="px-1 hover:border-b-2 hover:border-b-black flex items-center has-[input:checked]:border-b-2 has-[input:checked]:border-b-black cursor-pointer"
+                  className="px-1 hover:border-b-2 hover:border-b-base-content flex items-center has-[input:checked]:border-b-2 has-[input:checked]:border-b-base-content cursor-pointer"
                 >
                   <input
                     type="radio"
@@ -116,7 +116,7 @@ export default function CreateTicketPage() {
                 </label>
                 <label
                   htmlFor="tipo_atendimento_chat"
-                  className="px-1 hover:border-b-2 hover:border-b-black flex items-center has-[input:checked]:border-b-2 has-[input:checked]:border-b-black cursor-pointer"
+                  className="px-1 hover:border-b-2 hover:border-b-base-content flex items-center has-[input:checked]:border-b-2 has-[input:checked]:border-b-base-content cursor-pointer"
                 >
                   <input
                     type="radio"
@@ -130,9 +130,7 @@ export default function CreateTicketPage() {
               </div>
             </Form.Field>
             <Form.Field className="flex flex-col">
-              <Form.Label htmlFor="titulo" className="text-black">
-                Título
-              </Form.Label>
+              <Form.Label htmlFor="titulo">Título</Form.Label>
               <Form.Input
                 id="titulo"
                 type="text"
@@ -146,9 +144,7 @@ export default function CreateTicketPage() {
             </Form.Field>
 
             <Form.Field className="flex flex-col">
-              <Form.Label htmlFor="descricao" className="text-black">
-                Descrição
-              </Form.Label>
+              <Form.Label htmlFor="descricao">Descrição</Form.Label>
               <Form.Textarea
                 id="descricao"
                 placeholder="Digite a descrição do chamado"

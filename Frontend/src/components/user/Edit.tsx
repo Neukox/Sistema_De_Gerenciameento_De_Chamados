@@ -85,7 +85,7 @@ export default function EditUserForm({
       onSubmit={handleSubmit(onEditUserInfo)}
     >
       <Form.Field className="flex flex-col flex-1">
-        <Form.Label htmlFor="nome" className="text-black">
+        <Form.Label htmlFor="nome">
           Nome
         </Form.Label>
         <Form.Input
@@ -98,7 +98,7 @@ export default function EditUserForm({
         {errors.nome && <Form.Error>{errors.nome.message}</Form.Error>}
       </Form.Field>
       <Form.Field className="flex flex-col flex-1">
-        <Form.Label htmlFor="email" className="text-black">
+        <Form.Label htmlFor="email">
           Email
         </Form.Label>
         <Form.Input
