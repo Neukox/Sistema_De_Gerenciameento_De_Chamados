@@ -80,13 +80,14 @@ export async function alterarSenha(id: number, senha: string): Promise<void> {
   db.close();
 }
 
-export async function buscarEmailsAdmins(): Promise<string[]> {
+// Busca todos os administradores
+export async function buscarAdmins(): Promise<UsuarioDB[]> {
   const db = await connectDB();
 
-  const emails = await db.all<Pick<UsuarioDB, "email">[]>(
-    "SELECT email FROM usuarios WHERE tipo = 'admin'"
+  const admins = await db.all<UsuarioDB[]>(
+    "SELECT * FROM usuarios WHERE tipo = 'admin'"
   );
 
   db.close();
-  return emails.map((admin) => admin.email);
+  return admins;
 }
