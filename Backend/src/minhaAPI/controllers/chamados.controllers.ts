@@ -248,7 +248,7 @@ async function update(req: Request, res: Response): Promise<void> {
 
 async function updateStatus(req: Request, res: Response): Promise<void> {
   const id = Number(req.params.id);
-  const { status } = req.body;
+  const { status, mensagem } = req.body;
 
   if (
     !status ||
@@ -279,6 +279,18 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
     }
 
     await atualizarStatusChamado(id, status);
+
+    // Enviar e-mail de atualização de status
+    const usuario = await buscarUsuarioPorId(chamado.usuario_id as number);
+
+    if (usuario) {
+      await sendMessageEmail(usuario.email, {
+        user_name: usuario.nome,
+        ticket_title: chamado.titulo,
+        ticket_status: status,
+        ...(mensagem && { message: mensagem }),
+      });
+    }
 
     res
       .status(200)

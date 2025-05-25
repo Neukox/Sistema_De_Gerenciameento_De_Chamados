@@ -91,3 +91,29 @@ export async function sendMessageEmail(
     throw error;
   }
 }
+
+/**
+ * Envia um e-mail de atualização de status para o usuário sobre um chamado.
+ *
+ * @param {string} to - Endereço de e-mail do destinatário.
+ * @param {Record<string, any>} locals - Dados locais para o template do e-mail.
+ * @returns {Promise<void>} - Retorna uma Promise que resolve quando o e-mail for enviado.
+ * @throws {Error} Se ocorrer um erro ao enviar o e-mail.
+ */
+export async function sendStatusChangeEmail(
+  to: string,
+  locals: Record<string, any>
+): Promise<void> {
+  try {
+    await email.send({
+      template: "atualizacao-chamado",
+      message: {
+        to,
+      },
+      locals,
+    });
+  } catch (error) {
+    console.error(`Failed to send email to ${to}:`, error);
+    throw error;
+  }
+}
