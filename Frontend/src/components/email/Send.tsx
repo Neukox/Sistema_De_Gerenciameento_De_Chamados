@@ -1,6 +1,8 @@
+import React from "react";
 import CloseIcon from "@assets/icons/Close";
 import Form from "@components/ui/form";
 import { useToast } from "@context/ToastContext";
+import useUserInfo from "@hooks/useUserInfo";
 import {
   TicketResponse,
   sendMessage,
@@ -8,7 +10,6 @@ import {
 } from "@services/ticketServices";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import React from "react";
 import { useForm } from "react-hook-form";
 
 type SendMessageProps = {
@@ -28,6 +29,8 @@ export default function SendMessage({
 }: SendMessageProps) {
   // Hook para gerenciar o estado do toast
   const toast = useToast();
+  // Hook para pegar infomação de usuário (administrador)
+  const user = useUserInfo();
   // hook para gerenciar o formulário
   const {
     register,
@@ -73,9 +76,28 @@ export default function SendMessage({
 
   // Função para realizar o submit do formulário
   const onSubmit = (data: SendMessageForm) => {
+    // Verifica se o usuário está logado
+    if (!user || user?.role !== "admin") {
+      // Adiciona um toast de erro se o usuário não estiver autenticado
+      toast?.show({
+        message:
+          "Você precisa estar logado como administrador para enviar mensagens.",
+        type: "error",
+        duration: 2000,
+      });
+      return;
+    }
     // Chama a mutação para enviar a mensagem
     mutation.mutate({
       id: ticketID,
+      admin_id: user.id,
+      usuario_id: userID,
+      mensagem: data.mensagem,
+    });
+
+    console.log("dados enviados:", {
+      id: ticketID,
+      admin_id: user.id,
       usuario_id: userID,
       mensagem: data.mensagem,
     });

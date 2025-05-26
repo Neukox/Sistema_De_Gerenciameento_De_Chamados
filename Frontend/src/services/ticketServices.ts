@@ -23,6 +23,7 @@ export interface CreateTicketResponse extends TicketResponse {
 
 export interface ChangeStatusTicketRequest {
   id: number;
+  admin_id: number;
   status: TicketStatusType;
   mensagem?: string;
 }
@@ -30,6 +31,7 @@ export interface ChangeStatusTicketRequest {
 export interface SendMessageTicketRequest {
   id: number;
   usuario_id: number;
+  admin_id: number;
   mensagem: string;
 }
 
@@ -174,6 +176,7 @@ export async function changeTicketStatus(
   const response = await api.patch<TicketResponse>(
     `chamados/status/${data.id}`,
     {
+      admin_id: data.admin_id,
       status: data.status,
       mensagem: data.mensagem,
     }
@@ -199,6 +202,7 @@ export async function sendMessage(
   const response = await api.post<TicketResponse>(
     `chamados/mensagem/${data.id}`,
     {
+      admin_id: data.admin_id,
       usuario_id: data.usuario_id,
       mensagem: data.mensagem,
     }

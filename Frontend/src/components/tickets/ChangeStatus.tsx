@@ -12,6 +12,7 @@ import { AxiosError } from "axios";
 import { TicketStatusType } from "types/Ticket";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import useUserInfo from "@hooks/useUserInfo";
 
 type CancelTicketProps = {
   ticketID: number;
@@ -43,6 +44,8 @@ export default function ChangeStatusTicket({
 }: CancelTicketProps) {
   // Hook para gerenciar toasts
   const toast = useToast();
+  // hook para pegar infomação de usuário (administrador)
+  const user = useUserInfo();
   // Hook para gerenciar o formulário
   const {
     register,
@@ -104,9 +107,21 @@ export default function ChangeStatusTicket({
 
   // Função para realizar o submit do formulário
   const onSubmit = (data: ChangeStatusTicketForm) => {
+    // Verifica se o usuário está autenticado
+    if (!user || user?.role !== "admin") {
+      // Adiciona um toast de erro se o usuário não estiver autenticado
+      toast?.show({
+        message:
+          "Você precisa estar logado como administrador para alterar o status.",
+        type: "error",
+        duration: 2000,
+      });
+      return;
+    }
     // Chama a mutação para alterar o status do chamado
     mutation.mutate({
       id: ticketID,
+      admin_id: user?.id,
       status: data.status,
       mensagem: data.mensagem,
     });
