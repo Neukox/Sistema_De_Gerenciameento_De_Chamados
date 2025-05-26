@@ -14,7 +14,10 @@ import {
   sendNotificationToAdmins,
   sendStatusChangeEmail,
 } from "../email/send";
-import { buscarUsuarioPorId } from "../bancodedados/usuarioRepo";
+import {
+  buscarAdminPorId,
+  buscarUsuarioPorId,
+} from "../bancodedados/usuarioRepo";
 
 /**
  * Controller para gerenciar chamados.
@@ -251,8 +254,8 @@ async function update(req: Request, res: Response): Promise<void> {
  * */
 
 async function updateStatus(req: Request, res: Response): Promise<void> {
-  const id = Number(req.params.id);
-  const { status, mensagem } = req.body;
+  const chamadoID = Number(req.params.id);
+  const { status, mensagem, admin_id } = req.body;
 
   if (
     !status ||
@@ -270,7 +273,7 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
   }
 
   try {
-    const chamado = await buscarChamadosPorId(id);
+    const chamado = await buscarChamadosPorId(chamadoID);
 
     if (!chamado) {
       res.status(404).json({ message: "Chamado não encontrado" });
@@ -282,15 +285,15 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    await atualizarStatusChamado(id, status);
+    await atualizarStatusChamado(chamadoID, status);
 
     // Enviar e-mail de atualização de status
     const usuario = await buscarUsuarioPorId(chamado.usuario_id as number);
 
-    console.log("Usuario:", usuario);
+    const admin = await buscarAdminPorId(admin_id as number);
 
-    if (usuario) {
-      await sendStatusChangeEmail(usuario.email, {
+    if (usuario && admin) {
+      await sendStatusChangeEmail(admin.email, usuario.email, {
         user_name: usuario.nome,
         ticket_title: chamado.titulo,
         ticket_status: status,
@@ -351,11 +354,12 @@ async function cancel(req: Request, res: Response): Promise<void> {
  * @returns {Promise<void>} - Retorna uma Promise que resolve quando a resposta é enviada.
  * @throws {Error} - Lança um erro se ocorrer um problema ao enviar a mensagem.
  * */
+
 async function sendMessage(req: Request, res: Response): Promise<void> {
-  const { usuario_id: usuarioID, mensagem } = req.body;
+  const { usuario_id: usuarioID, mensagem, admin_id } = req.body;
   const chamadoID = Number(req.params.id);
 
-  if (!usuarioID || !mensagem) {
+  if (!usuarioID || !mensagem || !admin_id) {
     res.status(400).json({ message: "Dados inválidos" });
     return;
   }
@@ -388,12 +392,15 @@ async function sendMessage(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    if (Number(usuario.id) !== Number(chamado.usuario_id)) {
-      res.status(403).json({ message: "Usuário não autorizado" });
+    const admin = await buscarAdminPorId(admin_id as number);
+
+    if (!admin || admin.id === undefined) {
+      res.status(403).json({ message: "Admin não autorizado" });
       return;
     }
 
-    await sendMessageEmail(usuario.email, {
+    // Enviar mensagem por e-mail
+    await sendMessageEmail(admin.email, usuario.email, {
       user_name: usuario.nome,
       ticket_title: chamado.titulo,
       message: mensagem,

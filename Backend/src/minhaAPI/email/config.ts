@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 
 export const email = new Email({
   message: {
-    from: process.env.SMTP_USER,
+    from: `"Neukox" <${process.env.SMTP_USER}>`,
   },
   transport: transporter,
   send: true,

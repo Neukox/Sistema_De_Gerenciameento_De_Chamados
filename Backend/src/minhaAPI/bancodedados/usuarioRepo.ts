@@ -91,3 +91,18 @@ export async function buscarAdmins(): Promise<UsuarioDB[]> {
   db.close();
   return admins;
 }
+
+// busca um administrador por ID
+export async function buscarAdminPorId(
+  id: number
+): Promise<UsuarioDB | undefined> {
+  const db = await connectDB();
+
+  const admin = await db.get<UsuarioDB>(
+    "SELECT * FROM usuarios WHERE id = ? AND tipo = 'admin'",
+    [id]
+  );
+
+  db.close();
+  return admin;
+}

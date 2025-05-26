@@ -70,7 +70,7 @@ export async function registerUser(usuario: Usuario) {
     } = usuarioRegistrado;
     const usuarioRetornado = {
       id,
-      nome: nomeRegistrado,
+      name: nomeRegistrado,
       email: emailRegistrado,
       role: tipo,
     };

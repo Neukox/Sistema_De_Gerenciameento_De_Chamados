@@ -75,6 +75,7 @@ export async function sendNotificationToAdmins(
  */
 
 export async function sendMessageEmail(
+  from: string,
   to: string,
   locals: Record<string, any>
 ): Promise<void> {
@@ -82,6 +83,7 @@ export async function sendMessageEmail(
     await email.send({
       template: "mensagem-chamado",
       message: {
+        from: `"Administrador Neukox" <${from}>`, // Adiciona o remetente (administrador)
         to,
       },
       locals,
@@ -101,6 +103,7 @@ export async function sendMessageEmail(
  * @throws {Error} Se ocorrer um erro ao enviar o e-mail.
  */
 export async function sendStatusChangeEmail(
+  from: string,
   to: string,
   locals: Record<string, any>
 ): Promise<void> {
@@ -108,6 +111,7 @@ export async function sendStatusChangeEmail(
     await email.send({
       template: "atualizacao-chamado",
       message: {
+        from: `"Administrador Neukox" <${from}>`, // Adiciona o remetente (administrador)
         to,
       },
       locals,

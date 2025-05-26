@@ -33,7 +33,7 @@ router.post("/", autenticate, Controller.create);
 // Rota para enviar um e-mail de mensagem para o usuário sobre um chamado
 router.post(
   "/mensagem/:id",
-  [autenticate, validateIdParam],
+  [autenticate, verifyAdmin, validateIdParam],
   Controller.sendMessage
 );
 
