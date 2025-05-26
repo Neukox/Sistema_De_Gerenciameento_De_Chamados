@@ -23,7 +23,6 @@ import AdminDashboardPage from "@pages/admin/dashboard/page";
 import AdminChatTicketsPage from "@pages/admin/chamados/chat/page";
 import AdminEmailTicketsPage from "@pages/admin/chamados/email/page";
 import AdminTicketInfoPage from "@pages/admin/chamado/exibir/page";
-import AdminEditTicketPage from "@pages/admin/chamado/editar/page";
 
 /**
  * @description Configuração das rotas da aplicação utilizando o React Router.
@@ -111,10 +110,6 @@ const router = createBrowserRouter([
               {
                 path: ":id",
                 Component: AdminTicketInfoPage,
-              },
-              {
-                path: ":id/editar",
-                Component: AdminEditTicketPage,
               },
               {
                 path: ":id/chat",

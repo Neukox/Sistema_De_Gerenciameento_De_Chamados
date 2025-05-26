@@ -106,7 +106,7 @@ export default function AdminTicketInfoPage() {
               {ticket?.tipo_atendimento === "chat" && (
                 <button
                   className="btn btn-accent text-white disabled:bg-accent/65! disabled:text-white/50"
-                  onClick={() => navigate(`/chamado/${ticket?.id}/chat`)}
+                  onClick={() => navigate(`/admin/chamado/${ticket?.id}/chat`)}
                   disabled={isClosed}
                 >
                   Entrar em chat
@@ -127,13 +127,6 @@ export default function AdminTicketInfoPage() {
                 onClick={() => changeStatusDialog.current?.showModal()}
               >
                 Alterar Status
-              </button>
-              <button
-                className="btn btn-primary disabled:bg-primary/65! disabled:text-primary-content/50"
-                disabled={isClosed}
-                onClick={() => navigate(`/chamado/${ticket?.id}/editar`)}
-              >
-                Editar chamado
               </button>
             </div>
           </div>
