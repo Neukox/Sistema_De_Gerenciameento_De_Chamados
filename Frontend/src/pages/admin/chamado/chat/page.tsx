@@ -4,10 +4,21 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { Ticket } from "types/Ticket";
 
+/**
+ * @description Página de Chat do Chamado do Administrador.
+ *
+ * Esta página exibe os detalhes de um chamado específico e permite a interação via chat.
+ *
+ * @component
+ * @returns {JSX.Element} O componente da página renderizado.
+ */
 export default function AdminTicketChatPage() {
+  // Obtém os parâmetros da URL, incluindo o ID do chamado
   const params = useParams();
+  // Converte o ID do chamado para um número
   const id = Number(params.id);
 
+  // Hook para buscar os dados do chamado a partir do ID
   const { data: ticket } = useQuery<Ticket>({
     queryKey: ["ticket", id],
     queryFn: () => fetchTicketById(id),

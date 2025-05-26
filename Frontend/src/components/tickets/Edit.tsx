@@ -1,14 +1,13 @@
 import Form from "@components/ui/form";
 import { useToast } from "@context/ToastContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useError from "@hooks/useErrors";
 import {
   EditTicketData,
   editTicketSchema,
 } from "@schemas/tickets/EditTicketSchema";
 import { editTicket, TicketResponse } from "@services/ticketServices";
 import { useMutation } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
@@ -31,8 +30,6 @@ export default function EditTicketForm({
   ticketID,
   previousTicketData,
 }: EditTicketProps) {
-  // Hook para gerenciar o estado de erro
-  const { error: fetchError, addError, clearError } = useError();
   // Hook para exibir mensagens de toast
   const toast = useToast();
   // Hook para navegação entre páginas
@@ -52,7 +49,11 @@ export default function EditTicketForm({
   });
 
   // Hook para fazer a mutação de edição do chamado
-  const mutation = useMutation<TicketResponse, Error, EditTicketData>({
+  const mutation = useMutation<
+    TicketResponse,
+    AxiosError<TicketResponse>,
+    EditTicketData
+  >({
     mutationFn: (data) => editTicket(ticketID, data),
     onSuccess: (data) => {
       // Exibe uma mensagem de sucesso
@@ -61,28 +62,17 @@ export default function EditTicketForm({
         type: "success",
         duration: 2000,
         onClose: () => {
-          // Limpa o erro após o fechamento do toast
-          clearError();
           // Redireciona o usuário para a página do chamado editado
           navigate(`/chamado/${ticketID}`);
         },
       });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        // Adiciona o erro ao estado de erro se for um erro do Axios
-        addError(error?.response?.data.message || error?.response?.data.error);
-      } else {
-        // Adiciona um erro genérico ao estado de erro
-        addError("Erro ao editar chamado");
-      }
-
       // Exibe uma mensagem de erro
       toast?.show({
-        message: fetchError,
+        message: error.response?.data.message || "Erro ao editar chamado",
         type: "error",
         duration: 2000,
-        onClose: clearError,
       });
     },
   });
@@ -96,9 +86,7 @@ export default function EditTicketForm({
     <>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onEdit)}>
         <Form.Field className="flex flex-col">
-          <Form.Label htmlFor="titulo">
-            Título
-          </Form.Label>
+          <Form.Label htmlFor="titulo">Título</Form.Label>
           <Form.Input
             id="titulo"
             type="text"
@@ -110,9 +98,7 @@ export default function EditTicketForm({
         </Form.Field>
 
         <Form.Field className="flex flex-col">
-          <Form.Label htmlFor="descricao">
-            Descrição
-          </Form.Label>
+          <Form.Label htmlFor="descricao">Descrição</Form.Label>
           <Form.Textarea
             id="descricao"
             placeholder="Digite a descrição do chamado"

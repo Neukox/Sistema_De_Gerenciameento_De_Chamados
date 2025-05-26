@@ -2,7 +2,7 @@ import CloseIcon from "@assets/icons/Close";
 import Form from "@components/ui/form";
 import { useToast } from "@context/ToastContext";
 import {
-  FetchTicketsResponse,
+  TicketResponse,
   sendMessage,
   SendMessageTicketRequest,
 } from "@services/ticketServices";
@@ -37,8 +37,8 @@ export default function SendMessage({
   } = useForm<SendMessageForm>();
   // Hook para gerenciar a mutação de cancelamento de ticket
   const mutation = useMutation<
-    FetchTicketsResponse,
-    AxiosError<FetchTicketsResponse>,
+    TicketResponse,
+    AxiosError<TicketResponse>,
     SendMessageTicketRequest
   >({
     mutationFn: sendMessage,

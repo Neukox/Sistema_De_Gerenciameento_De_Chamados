@@ -10,7 +10,7 @@ import { User } from "types/User";
 
 /**
  * Componente de página de perfil do usuário.
- * Exibe informações do perfil do usuário e permite  editar o perfil do usuário.
+ * Exibe informações do perfil do usuário e permite editar o perfil do usuário.
  *
  * @returns {JSX.Element} Componente de página de perfil do usuário.
  */

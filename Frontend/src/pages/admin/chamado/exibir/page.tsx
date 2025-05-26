@@ -15,7 +15,7 @@ import SendMessage from "@components/email/Send";
  * @description Página de informações do chamado (admin).
  *
  * Essa página exibe os detalhes de um chamado específico, incluindo título, descrição,
- * status e tipo de atendimento. O administrador pode editar o chamado, alterar o status do chamado ou entrar em um chat.
+ * status e tipo de atendimento. O administrador pode editar o chamado, alterar o status do chamado, enviar e-mail (para chamados por email), e entrar em chat (para chamados por chat).
  *
  * @component
  * @returns {JSX.Element} O componente da página renderizado.

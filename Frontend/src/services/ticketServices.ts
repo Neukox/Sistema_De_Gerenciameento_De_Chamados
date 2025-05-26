@@ -10,6 +10,13 @@ export interface FetchTicketsResponse extends TicketResponse {
   chamados?: Ticket[];
 }
 
+export interface CreateTicketRequest {
+  usuario_id: number;
+  tipo_atendimento: string;
+  titulo: string;
+  descricao: string;
+}
+
 export interface CreateTicketResponse extends TicketResponse {
   chamado_id?: number;
 }
@@ -101,19 +108,16 @@ export async function fetchTicketById(id: number): Promise<Ticket> {
  *
  * Essa função faz uma requisição POST para a API e retorna uma mensagem de sucesso ou erro.
  *
- * @param {object} data - Os dados do chamado a serem criados.
+ * @param {CreateTicketRequest} data - Os dados do chamado a ser criado.
  * @param {number} data.usuario_id - O ID do usuário que está criando o chamado.
  * @param {string} data.tipo_atendimento - O tipo de atendimento do chamado.
  * @param {string} data.titulo - O título do chamado.
  * @param {string} data.descricao - A descrição do chamado.
  * @returns {Promise<TicketResponse>} - A resposta da API contendo uma mensagem de sucesso ou erro, e o ID do chamado.
  */
-export async function submitTicket(data: {
-  usuario_id: number;
-  tipo_atendimento: string;
-  titulo: string;
-  descricao: string;
-}): Promise<CreateTicketResponse> {
+export async function submitTicket(
+  data: CreateTicketRequest
+): Promise<CreateTicketResponse> {
   const response = await api.post<TicketResponse>("chamados", data);
   return response.data;
 }
@@ -158,8 +162,10 @@ export async function cancelTicket(id: number): Promise<TicketResponse> {
  *
  * Essa função faz uma requisição PATCH para a API e retorna uma mensagem de sucesso ou erro.
  *
- * @param {number} id - O ID do chamado a ter o status alterado.
- * @param {string} status - O novo status do chamado.
+ * @param {ChangeStatusTicketRequest} data - Os dados para alterar o status do chamado.
+ * @param {number} data.id - O ID do chamado cujo status será alterado.
+ * @param {TicketStatusType} data.status - O novo status do chamado.
+ * @param {string} [data.mensagem] - Uma mensagem opcional a ser associada à alteração de status.
  * @returns {Promise<TicketResponse>} - A resposta da API contendo uma mensagem de sucesso ou erro.
  */
 export async function changeTicketStatus(
@@ -180,8 +186,10 @@ export async function changeTicketStatus(
  *
  * Essa função faz uma requisição POST para a API e retorna uma mensagem de sucesso ou erro.
  *
- * @param {number} id - O ID do chamado ao qual a mensagem será adicionada.
- * @param {string} mensagem - A mensagem a ser adicionada ao chamado.
+ * @param {SendMessageTicketRequest} data - Os dados da mensagem a ser enviada.
+ * @param {number} data.id - O ID do chamado ao qual a mensagem será enviada.
+ * @param {number} data.usuario_id - O ID do usuário que está enviando a mensagem.
+ * @param {string} data.mensagem - O conteúdo da mensagem a ser enviada.
  * @returns {Promise<TicketResponse>} - A resposta da API contendo uma mensagem de sucesso ou erro.
  */
 

@@ -2,15 +2,18 @@ import ServiceTypeTag from "@components/tickets/ServiceType";
 import Form from "@components/ui/form";
 import { useToast } from "@context/ToastContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useError from "@hooks/useErrors";
 import useUserInfo from "@hooks/useUserInfo";
 import {
   CreateTicketData,
   createTicketSchema,
 } from "@schemas/tickets/CreateTicketSchema";
-import { submitTicket } from "@services/ticketServices";
+import {
+  CreateTicketRequest,
+  CreateTicketResponse,
+  submitTicket,
+} from "@services/ticketServices";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
@@ -27,8 +30,6 @@ import { useNavigate } from "react-router";
 export default function CreateTicketPage() {
   // Hook para exibir mensagens de toast
   const toast = useToast();
-  // Hook para gerenciar o estado de erro
-  const { error: fetchError, addError, clearError } = useError();
   // Hook para buscar informações do usuário
   const user = useUserInfo();
   // Hook para navegação entre páginas
@@ -47,7 +48,11 @@ export default function CreateTicketPage() {
   });
 
   // Hook para gerenciar a mutação de criação de chamado
-  const mutation = useMutation({
+  const mutation = useMutation<
+    CreateTicketResponse,
+    AxiosError<CreateTicketResponse>,
+    CreateTicketRequest
+  >({
     mutationFn: submitTicket,
     onSuccess: (data) => {
       //Exibe uma mensagem de sucesso
@@ -56,25 +61,17 @@ export default function CreateTicketPage() {
         type: "success",
         duration: 2000,
         onClose: () => {
-          // Limpa o erro após o fechamento do toast
-          clearError();
           // Redireciona o usuário para a página de chamados após a criação
           navigate(`/chamado/${data.chamado_id}`);
         },
       });
     },
     onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        addError(error?.response?.data.message || error?.response?.data.error);
-      } else {
-        addError("Erro ao criar chamado");
-      }
       // Exibe uma mensagem de erro
       toast?.show({
-        message: fetchError,
+        message: error.response?.data.message || "Erro ao criar chamado",
         type: "error",
         duration: 3000,
-        onClose: clearError,
       });
     },
   });

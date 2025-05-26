@@ -3,8 +3,8 @@ import Submit from "@components/ui/form/Submit";
 import { useToast } from "@context/ToastContext";
 import {
   changeTicketStatus,
-  FetchTicketsResponse,
   ChangeStatusTicketRequest,
+  TicketResponse,
 } from "@services/ticketServices";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Form from "@components/ui/form";
@@ -59,8 +59,8 @@ export default function ChangeStatusTicket({
   const queryClient = useQueryClient();
   // Hook para gerenciar a mutação de cancelamento de ticket
   const mutation = useMutation<
-    FetchTicketsResponse,
-    AxiosError<FetchTicketsResponse>,
+    TicketResponse,
+    AxiosError<TicketResponse>,
     ChangeStatusTicketRequest
   >({
     mutationFn: changeTicketStatus,
