@@ -1,5 +1,5 @@
 import AuthService from "../autenticacao/services";
-import UserService from "../usuarios/usuario.services";
+import UserService from "../usuarios/services";
 import { Request, Response } from "express";
 import { decodeToken, generateToken } from "../utils/JWT";
 import { sendRecoverPasswordEmail } from "../email/send";

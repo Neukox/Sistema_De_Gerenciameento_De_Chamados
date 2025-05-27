@@ -41,7 +41,7 @@ export function setupWebSocketServer(server: http.Server) {
                 usuario_id: msg.usuario_id,
                 de: msg.de,
                 conteudo: msg.mensagem,
-                data_envio: formatDate(msg.data_envio),
+                // data_envio: formatDate(msg.data_envio),
               })),
             })
           );
@@ -70,7 +70,7 @@ export function setupWebSocketServer(server: http.Server) {
             usuario_id: message.usuario_id,
             de: ultimaMensagem?.de,
             conteudo: ultimaMensagem?.mensagem,
-            data_envio: formatDate(ultimaMensagem?.data_envio as string),
+            // data_envio: formatDate(ultimaMensagem?.data_envio as string),
           });
           break;
         default:

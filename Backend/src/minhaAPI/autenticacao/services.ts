@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { ForgotPasswordData, UserData } from "./models";
-import UserService from "../usuarios/usuario.services";
+import UserService from "../usuarios/services";
 import { generateToken } from "../utils/JWT";
 import { gerarParDeChaves } from "../criptografia/criptografiaE2EE";
 
