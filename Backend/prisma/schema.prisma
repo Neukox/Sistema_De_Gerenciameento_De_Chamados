@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Usuario {
-  id          String     @id
+  id          Int        @id @default(autoincrement())
   nome        String
   email       String     @unique
   senha       String
@@ -23,7 +23,7 @@ model Usuario {
 }
 
 model Chamado {
-  id               String     @id
+  id               Int        @id @default(autoincrement())
   titulo           String
   descricao        String
   status           String     @default("aberto")
@@ -31,19 +31,19 @@ model Chamado {
   encerrado_em     DateTime?
   tipo_atendimento String
 
-  usuario_id       String
+  usuario_id       Int
   usuario          Usuario    @relation(fields: [usuario_id], references: [id])
 
   respostas        Resposta[]
 }
 
 model Resposta {
-  id          String     @id
+  id          Int        @id @default(autoincrement())
   mensagem    String?
   data_envio  DateTime   @default(now())
 
-  usuario_id  String
-  chamado_id  String
+  usuario_id  Int
+  chamado_id  Int
 
   usuario     Usuario    @relation(fields: [usuario_id], references: [id])
   chamado     Chamado    @relation(fields: [chamado_id], references: [id])

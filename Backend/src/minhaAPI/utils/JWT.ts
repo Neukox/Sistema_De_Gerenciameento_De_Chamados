@@ -21,6 +21,6 @@ export function decodeToken(token: string): jwt.JwtPayload {
 
     return decoded;
   } catch (error) {
-    throw new Error("Token inválido ou expirado.");
+    throw new jwt.JsonWebTokenError("Token inválido ou expirado");
   }
 }
