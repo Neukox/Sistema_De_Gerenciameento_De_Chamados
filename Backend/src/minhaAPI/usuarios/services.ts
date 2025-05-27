@@ -1,4 +1,5 @@
 import { PrismaClient, Usuario } from "@prisma/client";
+import { UsuarioUpdate } from "./models";
 
 const prisma = new PrismaClient();
 
@@ -52,4 +53,38 @@ async function getAdminById(id: number): Promise<Usuario | null> {
   return admin;
 }
 
-export default { getByEmail, getById, getAdminById, getAllAdmins };
+/**
+ * Função para atualizar as informações de um usuário.
+ *
+ * @param id - ID do usuário a ser atualizado.
+ * @param {UsuarioUpdate} data - Dados a serem atualizados.
+ * @param data.nome - Nome do usuário.
+ * @param data.email - Email do usuário.
+ */
+async function updateInfo(id: number, data: UsuarioUpdate): Promise<void> {
+  await prisma.usuario.update({
+    where: { id },
+    data: {
+      nome: data.nome,
+      email: data.email,
+    },
+  });
+}
+
+async function updatePassword(id: number, newPassword: string): Promise<void> {
+  await prisma.usuario.update({
+    where: { id },
+    data: {
+      senha: newPassword,
+    },
+  });
+}
+
+export default {
+  getByEmail,
+  getById,
+  getAdminById,
+  getAllAdmins,
+  updateInfo,
+  updatePassword,
+};

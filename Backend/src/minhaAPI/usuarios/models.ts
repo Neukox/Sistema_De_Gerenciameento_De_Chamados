@@ -1,15 +1,3 @@
-export interface Usuario {
-  id: number;
-  nome: string;
-  email: string;
-  senha: string;
-  tipo: string;
-  public_key: string;
-  private_key: string;
-}
+import { Usuario } from "@prisma/client";
 
-export interface UsuarioCreate {
-  nome: string;
-  email: string;
-  senha: string;
-}
+export type UsuarioUpdate = Pick<Usuario, "nome" | "email">;

@@ -1,13 +1,4 @@
-export interface Chamado {
-  id: number;
-  titulo: string;
-  descricao: string;
-  status: string;
-  usuario_id: number;
-  criado_em: Date;
-  encerrado_em: Date | null;
-  tipo_atendimento: string;
-}
+import { Chamado } from "@prisma/client";
 
 export interface ChamadoCompleto extends Chamado {
   nome_usuario?: string;

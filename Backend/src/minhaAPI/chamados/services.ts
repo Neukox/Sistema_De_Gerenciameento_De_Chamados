@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { Chamado, PrismaClient } from "@prisma/client";
 import {
-  Chamado,
   ChamadoCompleto,
   ChamadoCreate,
   ChamadoFiltros,
