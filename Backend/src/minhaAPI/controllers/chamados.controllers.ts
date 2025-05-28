@@ -7,10 +7,6 @@ import {
   sendNotificationToAdmins,
   sendStatusChangeEmail,
 } from "../email/send";
-import {
-  buscarAdminPorId,
-  buscarUsuarioPorId,
-} from "../bancodedados/usuarioRepo";
 
 /**
  * Controller para gerenciar chamados.
@@ -60,7 +56,7 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
       })),
     });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar chamados" });
+    res.status(500).json({ message: "Houve um erro ao buscar chamados" });
     console.error("Erro ao buscar chamados:", error);
   }
 };
@@ -98,7 +94,7 @@ async function getById(req: Request, res: Response): Promise<void> {
       data_encerramento: formatDate(chamado.encerrado_em),
     });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar chamado" });
+    res.status(500).json({ message: "Houve um erro ao buscar chamado" });
     console.error("Erro ao buscar chamado:", error);
   }
 }
@@ -143,7 +139,7 @@ async function getByUserId(req: Request, res: Response): Promise<void> {
       })),
     });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar chamados" });
+    res.status(500).json({ message: "Houve um erro ao buscar chamados" });
     console.error("Erro ao buscar chamados:", error);
   }
 }
@@ -182,7 +178,7 @@ async function create(req: Request, res: Response): Promise<void> {
 
     // Verifica se o chamado foi criado com sucesso
     if (!createdChamado) {
-      res.status(500).json({ message: "Erro ao criar chamado" });
+      res.status(500).json({ message: "Houve um erro ao criar chamado" });
       return;
     }
 
@@ -198,7 +194,7 @@ async function create(req: Request, res: Response): Promise<void> {
       chamado_id: createdChamado.id,
     });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao criar chamado" });
+    res.status(500).json({ message: "Houve um erro ao criar chamado" });
     console.error("Erro ao criar chamado:", error);
   }
 }
@@ -245,7 +241,7 @@ async function update(req: Request, res: Response): Promise<void> {
 
     res.status(200).json({ message: "Chamado atualizado com sucesso" });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao atualizar chamado" });
+    res.status(500).json({ message: "Houve um erro ao atualizar chamado" });
     console.error("Erro ao atualizar chamado:", error);
   }
 }
@@ -317,7 +313,7 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
       .status(200)
       .json({ message: "Status de chamado atualizado com sucesso" });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao atualizar chamado" });
+    res.status(500).json({ message: "Erro ao atualizar status de chamado" });
     console.error("Erro ao atualizar chamado:", error);
   }
 }
@@ -354,7 +350,7 @@ async function cancel(req: Request, res: Response): Promise<void> {
 
     res.status(200).json({ message: "Chamado cancelado com sucesso" });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao cancelar chamado" });
+    res.status(500).json({ message: "Houve um erro ao cancelar chamado" });
     console.error("Erro ao cancelar chamado:", error);
   }
 }
@@ -404,7 +400,7 @@ async function sendMessage(req: Request, res: Response): Promise<void> {
     }
 
     // Busca o usuário associado ao chamado
-    const usuario = await buscarUsuarioPorId(usuarioID as number);
+    const usuario = await UsuarioServices.getById(usuarioID as number);
 
     // Verifica se o usuário existe
     if (!usuario) {
@@ -413,7 +409,7 @@ async function sendMessage(req: Request, res: Response): Promise<void> {
     }
 
     // Busca o administrador que está enviando a mensagem
-    const admin = await buscarAdminPorId(admin_id as number);
+    const admin = await UsuarioServices.getAdminById(admin_id as number);
 
     // Verifica se o administrador existe
     if (!admin || admin.id === undefined) {
@@ -430,7 +426,7 @@ async function sendMessage(req: Request, res: Response): Promise<void> {
 
     res.status(200).json({ message: "Mensagem enviada com sucesso" });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao enviar mensagem" });
+    res.status(500).json({ message: "houve um erro ao enviar mensagem" });
     console.error("Erro ao enviar mensagem:", error);
   }
 }

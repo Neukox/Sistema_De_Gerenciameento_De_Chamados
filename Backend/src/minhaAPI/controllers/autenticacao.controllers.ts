@@ -96,7 +96,7 @@ async function register(req: Request, res: Response): Promise<void> {
     });
   } catch (error) {
     console.error("Erro ao registrar usuário:", error);
-    res.status(500).json({ message: "Houve um erro ao registrar usuário" });
+    res.status(500).json({ message: "Houve um erro ao fazer cadastro" });
   }
 }
 
