@@ -13,13 +13,13 @@ export default function ChatContainer() {
   // Hook para obter informações do usuário
   const user = useUserInfo();
   // convertendo o user.id para string
-  const userId = String(user?.id);
+  const userId = user?.id;
   // Hook para obter os parâmetros da URL
   const params = useParams();
 
   // Faz uso do hook useChat para obter o histórico de mensagens e a função de envio
   const { history, sendMessage, loading } = useChat(
-    params.id as string,
+    Number(params.id),
     userId
   );
   // ref para o contêiner de mensagens
