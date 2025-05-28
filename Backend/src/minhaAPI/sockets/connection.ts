@@ -1,15 +1,11 @@
 import { Server as WebSocketServer } from "ws";
 import http from "http";
+import RespostaServices from "../respostas/services";
 import {
   registerClient,
   sendMessageToChamado,
   unregisterClient,
 } from "./privateMessageHandler";
-import {
-  buscarMensagensPorChamadoId,
-  buscarUltimaMensagemPorChamadoId,
-  salvarMensagem,
-} from "../bancodedados/respostasRepo";
 import formatDate from "../utils/dateConverter";
 
 export function setupWebSocketServer(server: http.Server) {
@@ -28,7 +24,7 @@ export function setupWebSocketServer(server: http.Server) {
           registerClient(socket, message.chamado_id, message.usuario_id);
 
           // Envia o histórico de mensagens do chamado
-          const historico = await buscarMensagensPorChamadoId(
+          const historico = await RespostaServices.getAllByChamadoId(
             message.chamado_id
           );
 
@@ -39,9 +35,9 @@ export function setupWebSocketServer(server: http.Server) {
               chamado_id: message.chamado_id,
               historico: historico?.map((msg) => ({
                 usuario_id: msg.usuario_id,
-                de: msg.de,
+                de: msg.usuario?.nome || "Desconhecido",
                 conteudo: msg.mensagem,
-                // data_envio: formatDate(msg.data_envio),
+                data_envio: formatDate(msg.data_envio),
               })),
             })
           );
@@ -53,14 +49,14 @@ export function setupWebSocketServer(server: http.Server) {
           break;
         case "chat_message":
           // Salva a mensagem no banco de dados
-          await salvarMensagem(
-            message.chamado_id,
-            message.usuario_id,
-            message.conteudo
-          );
+          await RespostaServices.save({
+            chamado_id: message.chamado_id,
+            usuario_id: message.usuario_id,
+            mensagem: message.conteudo,
+          });
 
           // Recupera a ultima mensagem do banco de dados
-          const ultimaMensagem = await buscarUltimaMensagemPorChamadoId(
+          const ultimaMensagem = await RespostaServices.lastByChamadoId(
             message.chamado_id
           );
           // Envia a mensagem para todos os clientes registrados
@@ -68,9 +64,9 @@ export function setupWebSocketServer(server: http.Server) {
           sendMessageToChamado(message.chamado_id, {
             type: "chat_message",
             usuario_id: message.usuario_id,
-            de: ultimaMensagem?.de,
+            de: ultimaMensagem?.usuario?.nome || "Desconhecido",
             conteudo: ultimaMensagem?.mensagem,
-            // data_envio: formatDate(ultimaMensagem?.data_envio as string),
+            data_envio: formatDate(ultimaMensagem?.data_envio as Date),
           });
           break;
         default:
