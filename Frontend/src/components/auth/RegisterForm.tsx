@@ -3,7 +3,11 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { RegisterData, registerSchema } from "@schemas/auth/RegisterSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterResponse, registerUser } from "@services/authServices";
+import {
+  RegisterRequest,
+  RegisterResponse,
+  registerUser,
+} from "@services/authServices";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
@@ -36,7 +40,7 @@ export default function RegisterForm() {
   const mutation = useMutation<
     RegisterResponse,
     AxiosError<RegisterResponse>,
-    RegisterData
+    RegisterRequest
   >({
     mutationFn: registerUser,
     onSuccess: (data) => {
@@ -83,9 +87,9 @@ export default function RegisterForm() {
                 id="nome"
                 type="text"
                 placeholder="Registre seu nome"
-                {...register("name")}
+                {...register("nome")}
               />
-              {errors.name && <Form.Error>{errors.name?.message}</Form.Error>}
+              {errors.nome && <Form.Error>{errors.nome?.message}</Form.Error>}
             </Form.Field>
             <Form.Field className="flex-1 basis-48">
               <Form.Label htmlFor="email">Email</Form.Label>
@@ -103,11 +107,9 @@ export default function RegisterForm() {
                 id="senha"
                 type="password"
                 placeholder="Insira uma senha"
-                {...register("password")}
+                {...register("senha")}
               />
-              {errors.password && (
-                <Form.Error>{errors.password?.message}</Form.Error>
-              )}
+              {errors.senha && <Form.Error>{errors.senha?.message}</Form.Error>}
             </Form.Field>
             <Form.Field className="flex-1 basis-48">
               <Form.Label htmlFor="confirmar-senha">Confirmar Senha</Form.Label>
@@ -115,10 +117,10 @@ export default function RegisterForm() {
                 id="confirmar-senha"
                 type="password"
                 placeholder="Confirme sua senha"
-                {...register("confirmPassword")}
+                {...register("confirmar_senha")}
               />
-              {errors.confirmPassword && (
-                <Form.Error>{errors.confirmPassword?.message}</Form.Error>
+              {errors.confirmar_senha && (
+                <Form.Error>{errors.confirmar_senha?.message}</Form.Error>
               )}
             </Form.Field>
           </div>

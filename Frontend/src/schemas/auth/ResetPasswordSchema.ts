@@ -1,8 +1,5 @@
 import { z } from "zod";
-import {
-  passwordSchema,
-  confirmPasswordSchema,
-} from "./AuthSchema";
+import { passwordSchema, confirmPasswordSchema } from "./AuthSchema";
 
 /**
  * Esquema de validação para o formulário de redefinição de senha.
@@ -14,12 +11,12 @@ import {
  */
 export const resetPasswordSchema = z
   .object({
-    newPassword: passwordSchema,
-    confirmNewPassword: confirmPasswordSchema,
+    nova_senha: passwordSchema,
+    confirmar_nova_senha: confirmPasswordSchema,
   })
-  .refine((data) => data.newPassword === data.confirmNewPassword, {
+  .refine((data) => data.nova_senha === data.confirmar_nova_senha, {
     message: "As senhas não coincidem",
-    path: ["confirmPassword"],
+    path: ["confirmar_nova_senha"],
   });
 
 export type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
