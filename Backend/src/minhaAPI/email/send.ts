@@ -1,4 +1,4 @@
-import { buscarAdmins } from "../bancodedados/usuarioRepo";
+import UserServices from "../usuarios/services";
 import { email } from "./config";
 
 /**
@@ -37,7 +37,7 @@ export async function sendNotificationToAdmins(
   locals: Record<string, any>
 ): Promise<void> {
   try {
-    const admins = await buscarAdmins();
+    const admins = await UserServices.getAllAdmins();
 
     if (admins.length === 0) {
       console.log("No admin emails found.");
