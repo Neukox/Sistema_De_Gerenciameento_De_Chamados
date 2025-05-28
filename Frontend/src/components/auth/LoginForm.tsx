@@ -23,7 +23,7 @@ export default function LoginForm() {
 
   // Hook para navegação
   const navigate = useNavigate();
-  
+
   // Hook para gerenciar o estado do formulário
   const {
     register,
@@ -57,7 +57,7 @@ export default function LoginForm() {
       // Exibe um toast com a mensagem de erro
       toast?.show({
         message:
-          error.response?.data.mensagem || "Houve um erro ao fazer login.",
+          error.response?.data.message || "Houve um erro ao fazer login.",
         type: "error",
         duration: 3000,
       });

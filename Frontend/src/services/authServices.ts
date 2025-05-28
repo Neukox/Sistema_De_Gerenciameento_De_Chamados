@@ -2,8 +2,7 @@ import { api } from "../lib/api";
 import { UserSession } from "types/User";
 
 export interface AuthResponse {
-  mensagem: string;
-  erro?: string;
+  message: string;
 }
 
 export interface RegisterResponse extends AuthResponse {

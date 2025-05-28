@@ -3,7 +3,6 @@ import { Ticket, TicketStatusType } from "types/Ticket";
 
 export interface TicketResponse {
   message?: string;
-  error?: string;
 }
 
 export interface FetchTicketsResponse extends TicketResponse {

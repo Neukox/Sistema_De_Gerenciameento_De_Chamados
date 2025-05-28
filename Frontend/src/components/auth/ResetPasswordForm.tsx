@@ -50,7 +50,7 @@ export default function RegisterForm() {
     onSuccess: (data) => {
       // Exibe uma mensagem de sucesso usando o hook de toast
       toast?.show({
-        message: data.mensagem,
+        message: data.message || "Senha redefinida com sucesso.",
         type: "success",
         duration: 3000,
       });
@@ -59,9 +59,7 @@ export default function RegisterForm() {
       // Exibe uma mensagem de erro usando o hook de toast
       toast?.show({
         message:
-          error.response?.data.mensagem ||
-          error.response?.data.erro ||
-          "Houve um erro ao redefinir a senha.",
+          error.response?.data.message || "Houve um erro ao redefinir a senha.",
         type: "error",
         duration: 3000,
       });

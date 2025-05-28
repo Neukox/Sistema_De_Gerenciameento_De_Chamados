@@ -43,7 +43,7 @@ export default function RecoverPasswordForm() {
     onSuccess: (data) => {
       // Exibe uma mensagem de sucesso usando o hook de toast
       toast?.show({
-        message: data.mensagem,
+        message: data.message || "E-mail enviado com sucesso.",
         type: "success",
         duration: 3000,
       });
@@ -52,8 +52,7 @@ export default function RecoverPasswordForm() {
       // Exibe a mensagem de erro usando o hook de toast
       toast?.show({
         message:
-          error.response?.data.mensagem ||
-          "Houve um erro ao recuperar a senha.",
+          error.response?.data.message || "Houve um erro ao recuperar a senha.",
         type: "error",
         duration: 3000,
       });

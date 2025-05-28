@@ -51,7 +51,7 @@ export default function RegisterForm() {
       // Exibe a mensagem de erro
       toast?.show({
         message:
-          error.response?.data.mensagem || "Houve um erro ao fazer o cadastro.",
+          error.response?.data.message || "Houve um erro ao fazer o cadastro.",
         type: "error",
         duration: 3000,
       });
