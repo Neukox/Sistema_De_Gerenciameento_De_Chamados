@@ -20,7 +20,7 @@ export default function ChatContainer() {
   // Faz uso do hook useChat para obter o histórico de mensagens e a função de envio
   const { history, sendMessage, loading } = useChat(
     Number(params.id),
-    userId
+    Number(userId)
   );
   // ref para o contêiner de mensagens
   const containerRef = useRef<HTMLDivElement>(null);
