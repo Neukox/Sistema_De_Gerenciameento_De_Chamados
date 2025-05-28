@@ -1,19 +1,34 @@
+import { useToast } from "@context/ToastContext";
 import { useState, useEffect, useRef } from "react";
-import { ChatMessage, ChatMessageRequest } from "types/Chat";
+import { ChatMessage, SocketMessage } from "types/Chat";
 
-export default function useChat(chamadoId: string, userId: string) {
+/**
+ * Hook para gerenciar o chat de um chamado específico.
+ *
+ * Este hook estabelece uma conexão WebSocket com o servidor para enviar e receber mensagens
+ * relacionadas a um chamado específico, identificado por `chamadoId` e `userId`.
+ *
+ * @param {number} chamadoId - ID do chamado para o qual o chat está sendo gerenciado.
+ * @param {number} userId - ID do usuário que está participando do chat.
+ * @returns {Object} Um objeto contendo o histórico de mensagens, uma função para enviar mensagens e um estado de carregamento.
+ */
+export default function useChat(chamadoId: number, userId: number) {
+  // Estado para armazenar o histórico de mensagens do chat
   const [history, setHistory] = useState<ChatMessage[]>([]);
+  // Estado para controlar o carregamento do chat
   const [loading, setLoading] = useState(true);
+  // Referência para o WebSocket
   const ws = useRef<WebSocket | null>(null);
+  // Hook para exibir mensagens de erro
+  const toast = useToast();
 
+  // Hook de efeito para estabelecer a conexão WebSocket
   useEffect(() => {
     // Ativa o carregamento
     setLoading(true);
     ws.current = new WebSocket(`ws://localhost:5000/`);
 
     ws.current.onopen = () => {
-      console.log("Conexão estabelecida com o WebSocket");
-      // Envia a mensagem de registro para o servidor
       ws.current?.send(
         JSON.stringify({
           type: "register",
@@ -40,7 +55,6 @@ export default function useChat(chamadoId: string, userId: string) {
           setLoading(false);
           break;
         case "chat_message":
-          console.log("Mensagem recebida:", message);
           setHistory((prevHistory) => [
             ...prevHistory,
             {
@@ -51,6 +65,13 @@ export default function useChat(chamadoId: string, userId: string) {
             },
           ]);
           break;
+        case "error":
+          toast?.show({
+            type: "error",
+            message: message.error || "Erro desconhecido no servidor.",
+            duration: 2000,
+          });
+          break;
         default:
           console.log("Tipo de mensagem desconhecido:", message.type);
           break;
@@ -58,6 +79,7 @@ export default function useChat(chamadoId: string, userId: string) {
     };
 
     ws.current.onerror = () => {
+      console.error("Erro na conexão WebSocket.");
       setLoading(false);
     };
 
@@ -74,13 +96,11 @@ export default function useChat(chamadoId: string, userId: string) {
       ws.current?.close();
       ws.current = null;
     };
-  }, [chamadoId, userId]);
-
-  console.log("history", history);
+  }, [chamadoId, userId, toast]);
 
   function sendMessage(message: string) {
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-      const messageData: ChatMessageRequest = {
+      const messageData: SocketMessage = {
         type: "chat_message",
         chamado_id: chamadoId,
         usuario_id: userId,
