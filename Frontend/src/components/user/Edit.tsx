@@ -67,7 +67,7 @@ export default function EditUserForm({
     },
     onError: (error) => {
       toast?.show({
-        message: error.response?.data.message || error.response?.data.error,
+        message: error.response?.data.message || "Erro ao editar usuário",
         type: "error",
         duration: 2000,
       });
@@ -85,9 +85,7 @@ export default function EditUserForm({
       onSubmit={handleSubmit(onEditUserInfo)}
     >
       <Form.Field className="flex flex-col flex-1">
-        <Form.Label htmlFor="nome">
-          Nome
-        </Form.Label>
+        <Form.Label htmlFor="nome">Nome</Form.Label>
         <Form.Input
           id="nome"
           type="text"
@@ -98,9 +96,7 @@ export default function EditUserForm({
         {errors.nome && <Form.Error>{errors.nome.message}</Form.Error>}
       </Form.Field>
       <Form.Field className="flex flex-col flex-1">
-        <Form.Label htmlFor="email">
-          Email
-        </Form.Label>
+        <Form.Label htmlFor="email">Email</Form.Label>
         <Form.Input
           id="email"
           type="email"

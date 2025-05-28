@@ -6,7 +6,6 @@ import {
   confirmPasswordSchema,
 } from "./AuthSchema";
 
-
 /**
  * Esquema de validação para o formulário de registro.
  *
@@ -17,14 +16,14 @@ import {
  */
 export const registerSchema = z
   .object({
-    name: nameSchema,
+    nome: nameSchema,
     email: emailSchema,
-    password: passwordSchema,
-    confirmPassword: confirmPasswordSchema,
+    senha: passwordSchema,
+    confirmar_senha: confirmPasswordSchema,
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.senha === data.confirmar_senha, {
     message: "As senhas não coincidem",
-    path: ["confirmPassword"],
+    path: ["confirmar_senha"],
   });
 
 export type RegisterData = z.infer<typeof registerSchema>;

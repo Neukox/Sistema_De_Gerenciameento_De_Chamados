@@ -54,7 +54,7 @@ export default function ChangeUserPasswordForm({ userId }: { userId: number }) {
     onError: (error) => {
       // Exibe uma mensagem de erro
       toast?.show({
-        message: error.response?.data?.message || error.response?.data?.error,
+        message: error.response?.data?.message || "Erro ao alterar a senha",
         type: "error",
         duration: 3000,
       });

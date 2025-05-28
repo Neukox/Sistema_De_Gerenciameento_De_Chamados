@@ -9,7 +9,7 @@ import { emailSchema, passwordSchema } from "./AuthSchema";
  */
 export const loginSchema = z.object({
   email: emailSchema,
-  password: passwordSchema,
+  senha: passwordSchema,
 });
 
 export type LoginData = z.infer<typeof loginSchema>;

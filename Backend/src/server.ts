@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import usuarioRoutes from "./minhaAPI/routes/usuarioRoutes";
 import chamadosRoutes from "./minhaAPI/routes/chamadosRoutes";
+import autenticacaoRoutes from "./minhaAPI/routes/autenticacaoRoutes";
 import path from "path";
 import { setupWebSocketServer } from "./minhaAPI/sockets/connection";
 import http from "http";
@@ -28,7 +29,9 @@ app.use(
 );
 
 app.use(express.json());
-app.use("/", usuarioRoutes);
+
+app.use("/", autenticacaoRoutes);
+app.use("/user", usuarioRoutes);
 app.use("/chamados", chamadosRoutes);
 
 app.get("/", (req, res) => {

@@ -1,6 +1,9 @@
 import { useParams, useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { fetchTicketById } from "@services/ticketServices";
+import {
+  fetchTicketById,
+  FetchTicketsResponse,
+} from "@services/ticketServices";
 import StatusTag from "@components/tickets/Status";
 import { Ticket, TicketServiceType, TicketStatusType } from "types/Ticket";
 import ServiceTypeTag from "@components/tickets/ServiceType";
@@ -38,7 +41,7 @@ export default function AdminTicketInfoPage() {
     isError,
     error,
     refetch,
-  } = useQuery<Ticket, AxiosError>({
+  } = useQuery<Ticket, AxiosError<FetchTicketsResponse>>({
     queryKey: ["ticket", id],
     queryFn: () => fetchTicketById(id),
     enabled: !!id,
@@ -57,9 +60,8 @@ export default function AdminTicketInfoPage() {
       <FetchError
         title="Não foi possivel carregar as informações do chamado"
         message={
-          error?.response?.status === 404
-            ? "Chamado não encontrado"
-            : error.message
+          error?.response?.data?.message ||
+          "Houve um erro ao buscar as informações do chamado."
         }
         action={refetch}
       />

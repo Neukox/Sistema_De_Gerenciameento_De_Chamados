@@ -1,23 +1,12 @@
 import { Request, Response } from "express";
-import {
-  atualizarChamado,
-  atualizarStatusChamado,
-  buscarChamados,
-  buscarChamadosPorId,
-  buscarChamadosPorUsuarioId,
-  cancelarChamado,
-  inserirChamado,
-} from "../bancodedados/chamadoRepo";
+import ChamadoServices from "../chamados/services";
+import UsuarioServices from "../usuarios/services";
 import formatDate from "../utils/dateConverter";
 import {
   sendMessageEmail,
   sendNotificationToAdmins,
   sendStatusChangeEmail,
 } from "../email/send";
-import {
-  buscarAdminPorId,
-  buscarUsuarioPorId,
-} from "../bancodedados/usuarioRepo";
 
 /**
  * Controller para gerenciar chamados.
@@ -42,14 +31,15 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
   const { type, search, status } = req.query;
 
   try {
-    const chamados = await buscarChamados(
-      type as string,
-      search as string,
-      status as string
-    );
+    const chamados = await ChamadoServices.getAll({
+      type: type as string,
+      search: search as string,
+      status: status as string,
+    });
 
+    // Verifica se existem chamados
     if (!chamados || chamados.length === 0) {
-      res.status(404).json({ message: "Nenhum chamado encontrado" });
+      res.status(200).json({ message: "Nenhum chamado encontrado" });
       return;
     }
 
@@ -61,13 +51,12 @@ const getAll = async (req: Request, res: Response): Promise<void> => {
         status: chamado.status,
         usuario_id: chamado.usuario_id,
         tipo_atendimento: chamado.tipo_atendimento,
-        usuario_nome: chamado.usuarioNome,
         data_criacao: formatDate(chamado.criado_em),
         data_encerramento: formatDate(chamado.encerrado_em),
       })),
     });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar chamados" });
+    res.status(500).json({ message: "Houve um erro ao buscar chamados" });
     console.error("Erro ao buscar chamados:", error);
   }
 };
@@ -85,8 +74,9 @@ async function getById(req: Request, res: Response): Promise<void> {
   const id = Number(req.params.id);
 
   try {
-    const chamado = await buscarChamadosPorId(id);
+    const chamado = await ChamadoServices.getById(id);
 
+    // Verifica se o chamado foi encontrado
     if (!chamado) {
       res.status(404).json({ message: "Chamado não encontrado" });
       return;
@@ -98,13 +88,13 @@ async function getById(req: Request, res: Response): Promise<void> {
       descricao: chamado.descricao,
       status: chamado.status,
       usuario_id: chamado.usuario_id,
-      usuario_nome: chamado.usuarioNome,
+      usuario_nome: chamado.usuario?.nome,
       tipo_atendimento: chamado.tipo_atendimento,
       data_criacao: formatDate(chamado.criado_em),
       data_encerramento: formatDate(chamado.encerrado_em),
     });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar chamado" });
+    res.status(500).json({ message: "Houve um erro ao buscar chamado" });
     console.error("Erro ao buscar chamado:", error);
   }
 }
@@ -124,13 +114,13 @@ async function getByUserId(req: Request, res: Response): Promise<void> {
   const { search, type, status } = req.query;
 
   try {
-    const chamados = await buscarChamadosPorUsuarioId(
-      usuarioId,
-      search as string,
-      type as string,
-      status as string
-    );
+    const chamados = await ChamadoServices.getAllByUserId(usuarioId, {
+      search: search as string,
+      type: type as string,
+      status: status as string,
+    });
 
+    // Verifica se existem chamados
     if (!chamados || chamados.length === 0) {
       res.status(200).json({ message: "Nenhum chamado encontrado" });
       return;
@@ -149,7 +139,7 @@ async function getByUserId(req: Request, res: Response): Promise<void> {
       })),
     });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar chamados" });
+    res.status(500).json({ message: "Houve um erro ao buscar chamados" });
     console.error("Erro ao buscar chamados:", error);
   }
 }
@@ -172,21 +162,23 @@ async function create(req: Request, res: Response): Promise<void> {
     tipo_atendimento: tipoAtendimento,
   } = req.body;
 
+  // Validação dos dados recebidos
   if (!titulo || !descricao || !usuarioId || !tipoAtendimento) {
     res.status(400).json({ message: "Dados inválidos" });
     return;
   }
 
   try {
-    const createdChamado = await inserirChamado(
+    const createdChamado = await ChamadoServices.create({
       titulo,
       descricao,
-      usuarioId,
-      tipoAtendimento
-    );
+      usuario_id: usuarioId,
+      tipo_atendimento: tipoAtendimento,
+    });
 
+    // Verifica se o chamado foi criado com sucesso
     if (!createdChamado) {
-      res.status(500).json({ message: "Erro ao criar chamado" });
+      res.status(500).json({ message: "Houve um erro ao criar chamado" });
       return;
     }
 
@@ -202,7 +194,7 @@ async function create(req: Request, res: Response): Promise<void> {
       chamado_id: createdChamado.id,
     });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao criar chamado" });
+    res.status(500).json({ message: "Houve um erro ao criar chamado" });
     console.error("Erro ao criar chamado:", error);
   }
 }
@@ -221,24 +213,35 @@ async function update(req: Request, res: Response): Promise<void> {
   const id = Number(req.params.id);
   const { titulo, descricao } = req.body;
 
+  // Validação dos dados recebidos
   if (!titulo || !descricao) {
     res.status(400).json({ message: "Dados inválidos" });
     return;
   }
 
   try {
-    const chamado = await buscarChamadosPorId(id);
+    const chamado = await ChamadoServices.getById(id);
 
     if (!chamado) {
       res.status(404).json({ message: "Chamado não encontrado" });
       return;
     }
 
-    await atualizarChamado(id, titulo, descricao);
+    // Verifica se o chamado já está encerrado ou cancelado
+    if (["fechado", "cancelado"].includes(chamado.status as string)) {
+      res.status(400).json({ message: "Chamado já encerrado ou cancelado" });
+      return;
+    }
+
+    // Atualiza o chamado
+    await ChamadoServices.update(id, {
+      titulo,
+      descricao,
+    });
 
     res.status(200).json({ message: "Chamado atualizado com sucesso" });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao atualizar chamado" });
+    res.status(500).json({ message: "Houve um erro ao atualizar chamado" });
     console.error("Erro ao atualizar chamado:", error);
   }
 }
@@ -257,6 +260,7 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
   const chamadoID = Number(req.params.id);
   const { status, mensagem, admin_id } = req.body;
 
+  // Validação dos dados recebidos
   if (
     !status ||
     ![
@@ -273,30 +277,34 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
   }
 
   try {
-    const chamado = await buscarChamadosPorId(chamadoID);
+    const chamado = await ChamadoServices.getById(chamadoID);
 
+    // Verifica se o chamado foi encontrado
     if (!chamado) {
       res.status(404).json({ message: "Chamado não encontrado" });
       return;
     }
 
-    if (["fechado", "cancelado"].includes(chamado.status as string)) {
+    // Verifica se o chamado já está encerrado ou cancelado
+    if (["fechado", "cancelado"].includes(chamado.status)) {
       res.status(400).json({ message: "Chamado já encerrado ou cancelado" });
       return;
     }
 
-    await atualizarStatusChamado(chamadoID, status);
+    await ChamadoServices.updateStatus(chamadoID, status);
 
-    // Enviar e-mail de atualização de status
-    const usuario = await buscarUsuarioPorId(chamado.usuario_id as number);
+    // Busca o usuário associado ao chamado
+    const usuario = await UsuarioServices.getById(chamado.usuario_id);
 
-    const admin = await buscarAdminPorId(admin_id as number);
+    // Busca o administrador que está atualizando o status
+    const admin = await UsuarioServices.getAdminById(admin_id as number);
 
+    // Verifica se o usuário e o administrador existem
     if (usuario && admin) {
       await sendStatusChangeEmail(admin.email, usuario.email, {
         user_name: usuario.nome,
         ticket_title: chamado.titulo,
-        ticket_status: status,
+        ticket_status: status as string,
         ...(mensagem && { message: mensagem }),
       });
     }
@@ -305,7 +313,7 @@ async function updateStatus(req: Request, res: Response): Promise<void> {
       .status(200)
       .json({ message: "Status de chamado atualizado com sucesso" });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao atualizar chamado" });
+    res.status(500).json({ message: "Erro ao atualizar status de chamado" });
     console.error("Erro ao atualizar chamado:", error);
   }
 }
@@ -324,23 +332,25 @@ async function cancel(req: Request, res: Response): Promise<void> {
   const id = Number(req.params.id);
 
   try {
-    const chamado = await buscarChamadosPorId(id);
+    const chamado = await ChamadoServices.getById(id);
 
+    // Verifica se o chamado foi encontrado
     if (!chamado) {
       res.status(404).json({ message: "Chamado não encontrado" });
       return;
     }
 
-    if (["fechado", "cancelado"].includes(chamado.status as string)) {
+    // Verifica se o chamado já está encerrado ou cancelado
+    if (["fechado", "cancelado"].includes(chamado.status)) {
       res.status(400).json({ message: "Chamado já encerrado ou cancelado" });
       return;
     }
 
-    await cancelarChamado(id);
+    await ChamadoServices.cancel(id);
 
     res.status(200).json({ message: "Chamado cancelado com sucesso" });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao cancelar chamado" });
+    res.status(500).json({ message: "Houve um erro ao cancelar chamado" });
     console.error("Erro ao cancelar chamado:", error);
   }
 }
@@ -359,19 +369,22 @@ async function sendMessage(req: Request, res: Response): Promise<void> {
   const { usuario_id: usuarioID, mensagem, admin_id } = req.body;
   const chamadoID = Number(req.params.id);
 
+  // Validação dos dados recebidos
   if (!usuarioID || !mensagem || !admin_id) {
     res.status(400).json({ message: "Dados inválidos" });
     return;
   }
 
   try {
-    const chamado = await buscarChamadosPorId(chamadoID);
+    const chamado = await ChamadoServices.getById(chamadoID);
 
+    // Verifica se o chamado foi encontrado
     if (!chamado) {
       res.status(404).json({ message: "Chamado não encontrado" });
       return;
     }
 
+    // Verifica se o tipo de atendimento é "email"
     if (chamado.tipo_atendimento !== "email") {
       res.status(403).json({
         message:
@@ -380,20 +393,25 @@ async function sendMessage(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    if (["fechado", "cancelado"].includes(chamado.status as string)) {
+    // Verifica se o chamado já está encerrado ou cancelado
+    if (["fechado", "cancelado"].includes(chamado.status)) {
       res.status(400).json({ message: "Chamado já encerrado ou cancelado" });
       return;
     }
 
-    const usuario = await buscarUsuarioPorId(usuarioID as number);
+    // Busca o usuário associado ao chamado
+    const usuario = await UsuarioServices.getById(usuarioID as number);
 
+    // Verifica se o usuário existe
     if (!usuario) {
       res.status(404).json({ message: "Usuário não encontrado" });
       return;
     }
 
-    const admin = await buscarAdminPorId(admin_id as number);
+    // Busca o administrador que está enviando a mensagem
+    const admin = await UsuarioServices.getAdminById(admin_id as number);
 
+    // Verifica se o administrador existe
     if (!admin || admin.id === undefined) {
       res.status(403).json({ message: "Admin não autorizado" });
       return;
@@ -408,7 +426,7 @@ async function sendMessage(req: Request, res: Response): Promise<void> {
 
     res.status(200).json({ message: "Mensagem enviada com sucesso" });
   } catch (error) {
-    res.status(500).json({ error: "Erro ao enviar mensagem" });
+    res.status(500).json({ message: "houve um erro ao enviar mensagem" });
     console.error("Erro ao enviar mensagem:", error);
   }
 }

@@ -1,5 +1,5 @@
-export default function formatDate(dateString: string | null): string {
-  if (!dateString) {
+export default function formatDate(timestamp: Date | null): string {
+  if (!timestamp) {
     return "";
   }
 
@@ -8,7 +8,9 @@ export default function formatDate(dateString: string | null): string {
   const sqliteTimestampRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
 
   // Extraindo a parte da data e hora do timestamp
-  const match = dateString.match(sqliteTimestampRegex);
+  const match = sqliteTimestampRegex.exec(
+    timestamp.toISOString().replace("T", " ").substring(0, 19)
+  );
 
   if (!match) {
     throw new Error("Formato de data inválido");

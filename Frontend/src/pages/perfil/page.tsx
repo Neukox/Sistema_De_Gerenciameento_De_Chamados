@@ -37,7 +37,7 @@ export default function UserProfilePage() {
     return (
       <FetchError
         title="Não foi possível carregar as informações do usuário"
-        message={error.response?.data?.error || error.response?.data?.message}
+        message={error.response?.data?.message || error.message}
         action={refetch}
       />
     );

@@ -153,7 +153,9 @@ export default function CreateTicketPage() {
               )}
             </Form.Field>
 
-            <Form.Submit className="xs:self-end">Criar Chamado</Form.Submit>
+            <Form.Submit className="xs:self-end" disabled={mutation.isPending}>
+              Criar Chamado
+            </Form.Submit>
           </form>
         </div>
       </div>

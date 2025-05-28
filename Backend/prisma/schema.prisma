@@ -1,0 +1,50 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id          Int        @id @default(autoincrement())
+  nome        String
+  email       String     @unique
+  senha       String
+  tipo        String     @default("cliente")
+  public_key  String?
+  private_key String?
+
+  chamados    Chamado[]
+  respostas   Resposta[]
+}
+
+model Chamado {
+  id               Int        @id @default(autoincrement())
+  titulo           String
+  descricao        String
+  status           String     @default("aberto")
+  criado_em        DateTime   @default(now())
+  encerrado_em     DateTime?
+  tipo_atendimento String
+
+  usuario_id       Int
+  usuario          Usuario    @relation(fields: [usuario_id], references: [id])
+
+  respostas        Resposta[]
+}
+
+model Resposta {
+  id          Int        @id @default(autoincrement())
+  mensagem    String?
+  data_envio  DateTime   @default(now())
+
+  usuario_id  Int
+  chamado_id  Int
+
+  usuario     Usuario    @relation(fields: [usuario_id], references: [id])
+  chamado     Chamado    @relation(fields: [chamado_id], references: [id])
+}

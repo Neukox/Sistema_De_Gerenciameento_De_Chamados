@@ -1,10 +1,13 @@
+import { RegisterData } from "@schemas/auth/RegisterSchema";
 import { api } from "../lib/api";
 import { UserSession } from "types/User";
+import { LoginData } from "@schemas/auth/LoginSchema";
 
 export interface AuthResponse {
-  mensagem: string;
-  erro?: string;
+  message: string;
 }
+
+export type RegisterRequest = Omit<RegisterData, "confirmar_senha">;
 
 export interface RegisterResponse extends AuthResponse {
   session: UserSession;
@@ -16,24 +19,27 @@ export interface LoginResponse extends AuthResponse {
   token: string;
 }
 
+export interface ResetPasswordRequest {
+  nova_senha: string;
+  token: string;
+}
+
 /**
  * @description Função para registrar um novo usuário
  *
  * Essa função faz uma requisição POST para a rota "/register" da API
  * com os dados do usuário.
  *
- * @param data - Dados do usuário a serem registrados
- * @param data.name - Nome do usuário
+ * @param {RegisterRequest} data - Dados do usuário a serem registrados
+ * @param data.nome - Nome do usuário
  * @param data.email - E-mail do usuário
- * @param data.password - Senha do usuário
+ * @param data.senha - Senha do usuário
  * @returns Uma Promise que resolve com a resposta da API
  * @throws Erro se a requisição falhar
  */
-export async function registerUser(data: {
-  name: string;
-  email: string;
-  password: string;
-}): Promise<RegisterResponse> {
+export async function registerUser(
+  data: RegisterRequest
+): Promise<RegisterResponse> {
   const response = await api.post<RegisterResponse>("/register", data);
   return response.data;
 }
@@ -50,10 +56,7 @@ export async function registerUser(data: {
  * @returns Uma Promise que resolve com a resposta da API
  * @throws Erro se a requisição falhar
  */
-export async function login(data: {
-  email: string;
-  password: string;
-}): Promise<LoginResponse> {
+export async function login(data: LoginData): Promise<LoginResponse> {
   const response = await api.post<LoginResponse>("/login", data);
   return response.data;
 }
@@ -100,10 +103,9 @@ export async function recoverPassword(data: {
  * @returns Uma Promise que resolve com a resposta da API
  * @throws Erro se a requisição falhar
  */
-export async function resetPassword(data: {
-  newPassword: string;
-  token: string;
-}): Promise<AuthResponse> {
+export async function resetPassword(
+  data: ResetPasswordRequest
+): Promise<AuthResponse> {
   const response = await api.post<AuthResponse>("/reset-password", data);
   return response.data;
 }

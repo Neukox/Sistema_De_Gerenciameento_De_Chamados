@@ -1,10 +1,11 @@
 import EditTicketForm from "@components/tickets/Edit";
 import FetchError from "@components/ui/FetchError";
 import Loading from "@components/ui/Loading";
-import { fetchTicketById } from "@services/ticketServices";
+import { fetchTicketById, TicketResponse } from "@services/ticketServices";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useParams } from "react-router";
+import { Ticket } from "types/Ticket";
 
 /**
  * @description Página para editar um chamado existente.
@@ -22,7 +23,10 @@ export default function EditTicketPage() {
   const id = Number(params.id);
 
   // Hook para buscar os dados do chamado a partir do ID
-  const { data, isError, isLoading, error, refetch } = useQuery({
+  const { data, isError, isLoading, error, refetch } = useQuery<
+    Ticket,
+    AxiosError<TicketResponse>
+  >({
     queryKey: ["ticket", id],
     queryFn: () => fetchTicketById(id),
     enabled: !!id,
@@ -36,11 +40,7 @@ export default function EditTicketPage() {
     return (
       <FetchError
         title="Não foi possivel carregar as informações do chamado"
-        message={
-          (error as AxiosError)?.status === 404
-            ? "Chamado não encontrado"
-            : error.message
-        }
+        message={error.response?.data?.message || error.message}
         action={refetch}
       />
     );

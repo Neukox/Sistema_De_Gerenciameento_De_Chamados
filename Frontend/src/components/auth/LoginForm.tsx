@@ -23,7 +23,7 @@ export default function LoginForm() {
 
   // Hook para navegação
   const navigate = useNavigate();
-  
+
   // Hook para gerenciar o estado do formulário
   const {
     register,
@@ -57,7 +57,7 @@ export default function LoginForm() {
       // Exibe um toast com a mensagem de erro
       toast?.show({
         message:
-          error.response?.data.mensagem || "Houve um erro ao fazer login.",
+          error.response?.data.message || "Houve um erro ao fazer login.",
         type: "error",
         duration: 3000,
       });
@@ -91,11 +91,9 @@ export default function LoginForm() {
                 id="senha"
                 type="password"
                 placeholder="Insira uma senha"
-                {...register("password")}
+                {...register("senha")}
               />
-              {errors.password && (
-                <Form.Error>{errors.password?.message}</Form.Error>
-              )}
+              {errors.senha && <Form.Error>{errors.senha?.message}</Form.Error>}
             </Form.Field>
           </div>
           <Link to="/recuperar-senha" className="link link-primary text-center">

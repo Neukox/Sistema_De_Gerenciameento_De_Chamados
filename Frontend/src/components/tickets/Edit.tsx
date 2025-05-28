@@ -110,7 +110,9 @@ export default function EditTicketForm({
           )}
         </Form.Field>
 
-        <Form.Submit className="xs:self-end">Salvar</Form.Submit>
+        <Form.Submit className="xs:self-end" disabled={mutation.isPending}>
+          Salvar
+        </Form.Submit>
       </form>
     </>
   );

@@ -4,7 +4,6 @@ import { User } from "types/User";
 
 export interface UserResponse {
   message?: string;
-  error?: string;
 }
 
 /**

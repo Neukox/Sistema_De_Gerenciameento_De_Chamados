@@ -6,15 +6,14 @@ import {
   resetPasswordSchema,
 } from "@schemas/auth/ResetPasswordSchema";
 import { useMutation } from "@tanstack/react-query";
-import { AuthResponse, resetPassword } from "@services/authServices";
+import {
+  AuthResponse,
+  resetPassword,
+  ResetPasswordRequest,
+} from "@services/authServices";
 import { Link, useSearchParams } from "react-router";
 import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
-
-type ResetPasswordRequest = {
-  newPassword: string;
-  token: string;
-};
 
 /**
  * Componente funcional React que renderiza um formulário de redefinição de senha.
@@ -50,7 +49,7 @@ export default function RegisterForm() {
     onSuccess: (data) => {
       // Exibe uma mensagem de sucesso usando o hook de toast
       toast?.show({
-        message: data.mensagem,
+        message: data.message || "Senha redefinida com sucesso.",
         type: "success",
         duration: 3000,
       });
@@ -59,9 +58,7 @@ export default function RegisterForm() {
       // Exibe uma mensagem de erro usando o hook de toast
       toast?.show({
         message:
-          error.response?.data.mensagem ||
-          error.response?.data.erro ||
-          "Houve um erro ao redefinir a senha.",
+          error.response?.data.message || "Houve um erro ao redefinir a senha.",
         type: "error",
         duration: 3000,
       });
@@ -71,7 +68,7 @@ export default function RegisterForm() {
   // Função chamada ao enviar o formulário
   const onResetPassword = (data: ResetPasswordData) => {
     const resetData: ResetPasswordRequest = {
-      newPassword: data.newPassword,
+      nova_senha: data.nova_senha,
       token: token || "",
     };
 
@@ -96,10 +93,10 @@ export default function RegisterForm() {
                 id="nova-senha"
                 type="password"
                 placeholder="Insira uma nova senha"
-                {...register("newPassword")}
+                {...register("nova_senha")}
               />
-              {errors.newPassword && (
-                <Form.Error>{errors.newPassword?.message}</Form.Error>
+              {errors.nova_senha && (
+                <Form.Error>{errors.nova_senha?.message}</Form.Error>
               )}
             </Form.Field>
             <Form.Field className="flex-1">
@@ -110,10 +107,10 @@ export default function RegisterForm() {
                 id="confirmar-nova-senha"
                 type="password"
                 placeholder="Confirme a sua nova senha"
-                {...register("confirmNewPassword")}
+                {...register("confirmar_nova_senha")}
               />
-              {errors.confirmNewPassword && (
-                <Form.Error>{errors.confirmNewPassword?.message}</Form.Error>
+              {errors.confirmar_nova_senha && (
+                <Form.Error>{errors.confirmar_nova_senha?.message}</Form.Error>
               )}
             </Form.Field>
           </div>

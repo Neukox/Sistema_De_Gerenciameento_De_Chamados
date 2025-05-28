@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { fetchTicketById } from "@services/ticketServices";
+import { fetchTicketById, TicketResponse } from "@services/ticketServices";
 import StatusTag from "@components/tickets/Status";
 import { Ticket, TicketServiceType, TicketStatusType } from "types/Ticket";
 import ServiceTypeTag from "@components/tickets/ServiceType";
@@ -36,7 +36,7 @@ export default function TicketInfoPage() {
     isError,
     error,
     refetch,
-  } = useQuery<Ticket, AxiosError>({
+  } = useQuery<Ticket, AxiosError<TicketResponse>>({
     queryKey: ["ticket", id],
     queryFn: () => fetchTicketById(id),
     enabled: !!id,
@@ -59,11 +59,7 @@ export default function TicketInfoPage() {
     return (
       <FetchError
         title="Não foi possivel carregar as informações do chamado"
-        message={
-          error?.response?.status === 404
-            ? "Chamado não encontrado"
-            : error.message
-        }
+        message={error.response?.data?.message || error.message}
         action={refetch}
       />
     );
