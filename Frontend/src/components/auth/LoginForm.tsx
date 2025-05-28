@@ -91,11 +91,9 @@ export default function LoginForm() {
                 id="senha"
                 type="password"
                 placeholder="Insira uma senha"
-                {...register("password")}
+                {...register("senha")}
               />
-              {errors.password && (
-                <Form.Error>{errors.password?.message}</Form.Error>
-              )}
+              {errors.senha && <Form.Error>{errors.senha?.message}</Form.Error>}
             </Form.Field>
           </div>
           <Link to="/recuperar-senha" className="link link-primary text-center">

@@ -1,7 +1,9 @@
 import { Chamado } from "@prisma/client";
 
 export interface ChamadoCompleto extends Chamado {
-  nome_usuario?: string;
+  usuario?: {
+    nome: string; // Nome do usuário
+  };
 }
 
 export interface ChamadoFiltros {

@@ -88,7 +88,7 @@ async function getById(req: Request, res: Response): Promise<void> {
       descricao: chamado.descricao,
       status: chamado.status,
       usuario_id: chamado.usuario_id,
-      usuario_nome: chamado.nome_usuario,
+      usuario_nome: chamado.usuario?.nome,
       tipo_atendimento: chamado.tipo_atendimento,
       data_criacao: formatDate(chamado.criado_em),
       data_encerramento: formatDate(chamado.encerrado_em),
