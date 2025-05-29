@@ -26,7 +26,7 @@ export default function useChat(chamadoId: number, userId: number) {
   useEffect(() => {
     // Ativa o carregamento
     setLoading(true);
-    ws.current = new WebSocket(`ws://localhost:5000/`);
+    ws.current = new WebSocket(import.meta.env.VITE_WS_URL || "ws://localhost:5000/");
 
     ws.current.onopen = () => {
       ws.current?.send(

@@ -1,8 +1,0 @@
-node_modules
-dist
-build
-.git
-.gitignore
-Dockerfile
-npm-debug.log
-prisma/migrations
