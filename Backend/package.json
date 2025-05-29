@@ -19,7 +19,8 @@
   },
   "main": "server.ts",
   "scripts": {
-    "start": "npx --watch ts-node src/server.ts"
+    "start": "npx --watch ts-node src/server.ts",
+    "build": "tsc -p tsconfig.json"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
