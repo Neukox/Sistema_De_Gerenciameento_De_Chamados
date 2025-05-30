@@ -24,7 +24,7 @@ export const email = new Email({
   send: true,
   preview: false,
   views: {
-    root: path.join(__dirname, "templates"),
+    root: path.join(__dirname, "../../../email-templates"),
     options: {
       extension: "hbs",
       map: {

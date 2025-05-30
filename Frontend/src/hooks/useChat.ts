@@ -1,6 +1,6 @@
 import { useToast } from "@context/ToastContext";
 import { useState, useEffect, useRef } from "react";
-import { ChatMessage, SocketMessage } from "types/Chat";
+import { ChatMessage } from "types/Chat";
 
 /**
  * Hook para gerenciar o chat de um chamado específico.
@@ -26,7 +26,9 @@ export default function useChat(chamadoId: number, userId: number) {
   useEffect(() => {
     // Ativa o carregamento
     setLoading(true);
-    ws.current = new WebSocket(`ws://localhost:5000/`);
+    ws.current = new WebSocket(
+      import.meta.env.VITE_WS_URL || "ws://localhost:5000/"
+    );
 
     ws.current.onopen = () => {
       ws.current?.send(
@@ -99,17 +101,23 @@ export default function useChat(chamadoId: number, userId: number) {
   }, [chamadoId, userId, toast]);
 
   function sendMessage(message: string) {
-    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-      const messageData: SocketMessage = {
-        type: "chat_message",
-        chamado_id: chamadoId,
-        usuario_id: userId,
-        conteudo: message,
-      };
-      ws.current.send(JSON.stringify(messageData));
-    } else {
-      console.warn("WebSocket não está aberto. Mensagem não enviada.");
-    }
+    const send = () => {
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        ws.current.send(
+          JSON.stringify({
+            type: "chat_message",
+            usuario_id: userId,
+            chamado_id: chamadoId,
+            conteudo: message,
+          })
+        );
+      } else {
+        console.error("WebSocket não está aberto.");
+        setTimeout(send, 1000); // Tenta enviar novamente após 1 segundo
+      }
+    };
+
+    send();
   }
 
   return { history, sendMessage, loading };

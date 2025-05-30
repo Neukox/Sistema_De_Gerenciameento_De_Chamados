@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@prisma/client": "^6.8.2",
-    "@types/sqlite3": "^3.1.11",
     "bcrypt": "^5.1.1",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
@@ -13,13 +12,15 @@
     "handlebars": "^4.7.8",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.10.0",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7",
     "ws": "^8.18.1"
   },
   "main": "server.ts",
   "scripts": {
-    "start": "npx --watch ts-node src/server.ts"
+    "dev": "npx --watch ts-node src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc -p tsconfig.json",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

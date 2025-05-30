@@ -51,11 +51,19 @@ export const unregisterClient = (chamadoId: string, userId: string): void => {
  * */
 export const sendMessageToChamado = (chamadoId: string, message: any): void => {
   const chamadoClients = chamados.get(chamadoId);
+  console.log(
+    `Enviando mensagem para o chamado ${chamadoId}: ${JSON.stringify(message)}`
+  );
 
   if (chamadoClients) {
     chamadoClients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify(message));
+        console.log(`Mensagem enviada para o cliente no chamado ${chamadoId}`);
+      } else {
+        console.warn(
+          `Cliente no chamado ${chamadoId} não está aberto. Mensagem não enviada.`
+        );
       }
     });
   } else {

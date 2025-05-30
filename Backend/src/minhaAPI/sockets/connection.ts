@@ -42,6 +42,8 @@ export function setupWebSocketServer(server: http.Server) {
                 })),
               })
             );
+            (socket as any).chamado_id = message.chamado_id;
+            (socket as any).usuario_id = message.usuario_id;
             break;
           case "unregister":
             // Desregistra o cliente do chamado
@@ -99,7 +101,16 @@ export function setupWebSocketServer(server: http.Server) {
     });
 
     socket.on("close", () => {
-      console.log("🔌 Cliente WebSocket desconectado");
+      const chamadoId = (socket as any).chamado_id;
+      const usuarioId = (socket as any).usuario_id;
+
+      if (chamadoId && usuarioId) {
+        // Desregistra o cliente do chamado e do usuário
+        unregisterClient(chamadoId, usuarioId);
+        console.log(
+          `🔌 Cliente desconectado: chamado ${chamadoId}, usuário ${usuarioId}`
+        );
+      } 
     });
 
     socket.send("👋 Conexão WebSocket estabelecida!");

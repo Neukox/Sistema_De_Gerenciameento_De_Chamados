@@ -3,4 +3,4 @@
 **/dist/
 **/build/
 **/prisma/migrations/
-Backend/.env
+**/.env
