@@ -3,6 +3,7 @@ import { RouterProvider } from "react-router";
 import router from "./routes";
 import ToastContainer from "@components/ui/toast/Container";
 import ToastProvider from "@context/ToastContext";
+import { AuthProvider } from "@context/AuthContext";
 
 function App() {
   const queryClient = new QueryClient({
@@ -16,8 +17,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
-        <RouterProvider router={router} />
-        <ToastContainer />
+        <AuthProvider>
+          <RouterProvider router={router} />
+          <ToastContainer />
+        </AuthProvider>
       </ToastProvider>
     </QueryClientProvider>
   );

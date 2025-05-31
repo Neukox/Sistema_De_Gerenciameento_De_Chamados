@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login, LoginResponse } from "@services/authServices";
 import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
+import { useAuth } from "@context/AuthContext";
 
 /**
  * Componente funcional React que renderiza um formulário de login.
@@ -20,6 +21,9 @@ import { useToast } from "@context/ToastContext";
 export default function LoginForm() {
   // Hook para exibir mensagens de toast
   const toast = useToast();
+
+  // Hook para autenticação
+  const { setSession } = useAuth();
 
   // Hook para navegação
   const navigate = useNavigate();
@@ -46,11 +50,9 @@ export default function LoginForm() {
   >({
     mutationFn: login,
     onSuccess: (data) => {
-      // Armazena o token e a sessão no sessionStorage
-      sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("session", JSON.stringify(data.session));
-
-      // Redireciona o usuário para a página inicial após o login
+      // Armazena o token e o usuário na sessão
+      setSession(data.token, data.user);
+      // navega para a página raiz após o login
       navigate("/");
     },
     onError: (error) => {
@@ -87,10 +89,10 @@ export default function LoginForm() {
             </Form.Field>
             <Form.Field className="flex-1">
               <Form.Label htmlFor="senha">Senha</Form.Label>
-              <Form.Input
+              <Form.Password
                 id="senha"
-                type="password"
-                placeholder="Insira uma senha"
+                placeholder="Insira sua senha"
+                className="w-full shadow-none"
                 {...register("senha")}
               />
               {errors.senha && <Form.Error>{errors.senha?.message}</Form.Error>}

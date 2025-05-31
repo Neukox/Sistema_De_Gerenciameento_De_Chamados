@@ -10,8 +10,8 @@ export const api = axios.create({
 
 // Intercepta as requisições para adicionar o token de autenticação
 api.interceptors.request.use((config) => {
-  // Obtém o token do sessionStorage
-  const token = sessionStorage.getItem("token");
+  // Obtém o token do localStorage
+  const token = localStorage.getItem("token");
 
   // Se o token existir, adiciona ao cabeçalho da requisição
   if (token) {

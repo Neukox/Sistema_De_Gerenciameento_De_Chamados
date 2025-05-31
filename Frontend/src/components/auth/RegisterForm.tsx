@@ -11,6 +11,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useToast } from "@context/ToastContext";
+import { useAuth } from "@context/AuthContext";
 
 /**
  * Componente funcional React que renderiza um formulário de registro.
@@ -23,6 +24,9 @@ import { useToast } from "@context/ToastContext";
 export default function RegisterForm() {
   // Hook para exibir mensagens de toast
   const toast = useToast();
+
+  // Hook para autenticação
+  const { setSession } = useAuth();
 
   // Hook para navegação
   const navigate = useNavigate();
@@ -44,11 +48,10 @@ export default function RegisterForm() {
   >({
     mutationFn: registerUser,
     onSuccess: (data) => {
-      // Armazena o token e a sessão no sessionStorage
-      sessionStorage.setItem("token", data.token);
-      sessionStorage.setItem("session", JSON.stringify(data.session));
-
+      // Armazena o token e o usuário na sessão
+      setSession(data.token, data.user);
       // Redireciona o usuário para a página inicial após o login
+      console.log("Redirecionando para '/'");
       navigate("/");
     },
     onError: (error) => {
@@ -103,20 +106,20 @@ export default function RegisterForm() {
             </Form.Field>
             <Form.Field className="flex-1 basis-48">
               <Form.Label htmlFor="senha">Senha</Form.Label>
-              <Form.Input
+              <Form.Password
                 id="senha"
-                type="password"
-                placeholder="Insira uma senha"
+                placeholder="Insira sua senha"
+                className="w-full shadow-none"
                 {...register("senha")}
               />
               {errors.senha && <Form.Error>{errors.senha?.message}</Form.Error>}
             </Form.Field>
             <Form.Field className="flex-1 basis-48">
               <Form.Label htmlFor="confirmar-senha">Confirmar Senha</Form.Label>
-              <Form.Input
+              <Form.Password
                 id="confirmar-senha"
-                type="password"
                 placeholder="Confirme sua senha"
+                className="w-full shadow-none"
                 {...register("confirmar_senha")}
               />
               {errors.confirmar_senha && (

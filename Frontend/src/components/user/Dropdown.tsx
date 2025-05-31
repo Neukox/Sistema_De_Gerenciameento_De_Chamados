@@ -1,9 +1,9 @@
 import ChevronDownIcon from "@assets/icons/ChevronDown";
 import LogoutIcon from "@assets/icons/Logout";
 import ProfileIcon from "@assets/icons/Profile";
-import useUserInfo from "@hooks/useUserInfo";
-import { logout } from "@services/authServices";
+import { useAuth } from "@context/AuthContext";
 import { Link } from "react-router";
+import { useNavigate } from "react-router";
 
 /**
  * @description Componente de Dropdown de Usuário.
@@ -16,7 +16,17 @@ import { Link } from "react-router";
  * @returns {JSX.Element} O componente de Dropdown de Usuário renderizado.
  */
 export default function UserDropdown() {
-  const user = useUserInfo();
+  // Hook para autenticação
+  const { user, logout } = useAuth();
+
+  // Hook para navegação
+  const navigate = useNavigate();
+
+  // Função para lidar com o logout
+  const handleLogout = () => {
+    logout();
+    navigate("/login"); // Redireciona para a página de login após o logout
+  };
 
   return (
     <div className="dropdown dropdown-end">
@@ -45,7 +55,7 @@ export default function UserDropdown() {
           </Link>
         </li>
         <li>
-          <button onClick={logout}>
+          <button onClick={handleLogout}>
             <LogoutIcon className="w-6" />
             Sair
           </button>

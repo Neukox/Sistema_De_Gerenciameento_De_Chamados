@@ -5,10 +5,10 @@ export default function useUserInfo() {
   const [user, setUser] = useState<Omit<UserSession, "iat" | "exp">>();
 
   useEffect(() => {
-    const session = sessionStorage.getItem("session");
+    const user = localStorage.getItem("user");
 
-    if (session) {
-      const parsedUser = JSON.parse(session);
+    if (user) {
+      const parsedUser = JSON.parse(user);
       setUser(parsedUser);
     }
   }, []);

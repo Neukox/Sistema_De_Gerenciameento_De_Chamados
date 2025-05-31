@@ -89,10 +89,10 @@ export default function RegisterForm() {
           <div className="flex flex-col gap-6">
             <Form.Field className="flex-1">
               <Form.Label htmlFor="senha">Nova senha</Form.Label>
-              <Form.Input
+              <Form.Password
                 id="nova-senha"
-                type="password"
-                placeholder="Insira uma nova senha"
+                placeholder="Insira sua nova senha"
+                className="w-full shadow-none"
                 {...register("nova_senha")}
               />
               {errors.nova_senha && (
@@ -103,10 +103,10 @@ export default function RegisterForm() {
               <Form.Label htmlFor="confirmar-senha">
                 Confirmar nova senha
               </Form.Label>
-              <Form.Input
+              <Form.Password
                 id="confirmar-nova-senha"
-                type="password"
-                placeholder="Confirme a sua nova senha"
+                placeholder="Confirme sua nova senha"
+                className="w-full shadow-none"
                 {...register("confirmar_nova_senha")}
               />
               {errors.confirmar_nova_senha && (

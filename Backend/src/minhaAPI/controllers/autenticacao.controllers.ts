@@ -41,7 +41,7 @@ async function login(req: Request, res: Response): Promise<void> {
 
     res.status(200).json({
       message: "Login bem-sucedido",
-      session: {
+      user: {
         id: usuario.id,
         name: usuario.name,
         email: usuario.email,
@@ -86,7 +86,7 @@ async function register(req: Request, res: Response): Promise<void> {
 
     res.status(201).json({
       message: "Usuário registrado com sucesso",
-      session: {
+      user: {
         id: usuario?.id,
         name: usuario?.name,
         email: usuario?.email,
@@ -140,6 +140,13 @@ async function forgotPassword(req: Request, res: Response): Promise<void> {
   }
 }
 
+/**
+ * Função para redefinir a senha do usuário.
+ * Verifica o token de redefinição e atualiza a senha do usuário.
+ *
+ * @returns {Promise<void>} Retorna uma resposta JSON com uma mensagem de sucesso ou erro.
+ * */
+
 async function resetPassword(req: Request, res: Response): Promise<void> {
   const { nova_senha, token } = req.body;
 
@@ -178,12 +185,40 @@ async function resetPassword(req: Request, res: Response): Promise<void> {
 }
 
 /**
- * Controlador de autenticação para gerenciar o login, registro e redefinição de senha.
- * Exporta as funções de login, registro e solicitação de redefinição de senha.
+ * Função para verificar a validade de um token JWT.
+ * Decodifica o token e retorna as informações do usuário se for válido.
+ *
+ * @returns {Promise<void>} Retorna uma resposta JSON com o status de validade do token e as informações do usuário.
  */
+
+async function verify(req: Request, res: Response): Promise<void> {
+  const { token } = req.body;
+
+  // Verifica se o token foi fornecido
+  if (!token) {
+    res.status(400).json({ valid: false, message: "Token não fornecido" });
+    return;
+  }
+
+  try {
+    const decodedToken = decodeToken(token);
+    res.status(200).json({
+      valid: true,
+      message: "Token validado com sucesso",
+      user: decodedToken,
+    });
+  } catch (error) {
+    console.error("Erro ao verificar token:", error);
+    res
+      .status(401)
+      .json({ valid: false, message: "Token inválido ou expirado" });
+  }
+}
+
 export default {
   login,
   register,
   forgotPassword,
   resetPassword,
+  verify,
 };

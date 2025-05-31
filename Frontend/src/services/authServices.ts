@@ -4,24 +4,29 @@ import { UserSession } from "types/User";
 import { LoginData } from "@schemas/auth/LoginSchema";
 
 export interface AuthResponse {
-  message: string;
+  message?: string;
 }
 
 export type RegisterRequest = Omit<RegisterData, "confirmar_senha">;
 
 export interface RegisterResponse extends AuthResponse {
-  session: UserSession;
+  user: UserSession;
   token: string;
 }
 
 export interface LoginResponse extends AuthResponse {
-  session: UserSession;
+  user: UserSession;
   token: string;
 }
 
-export interface ResetPasswordRequest {
+export interface ResetPasswordRequest extends AuthResponse {
   nova_senha: string;
   token: string;
+}
+
+export interface VerifyTokenResponse extends AuthResponse {
+  valid: boolean;
+  user?: UserSession;
 }
 
 /**
@@ -62,18 +67,6 @@ export async function login(data: LoginData): Promise<LoginResponse> {
 }
 
 /**
- * @description Função para fazer logout de um usuário
- *
- * Essa função remove o token e a sessão do sessionStorage
- * e redireciona o usuário para a página de login.
- */
-export function logout() {
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("session");
-  window.location.href = "/login";
-}
-
-/**
  * @description Função para recuperar a senha de um usuário
  *
  * Essa função faz uma requisição POST para a rota "/recover-password" da API
@@ -107,5 +100,22 @@ export async function resetPassword(
   data: ResetPasswordRequest
 ): Promise<AuthResponse> {
   const response = await api.post<AuthResponse>("/reset-password", data);
+  return response.data;
+}
+
+/**
+ * @description Função para verificar o token de um usuário
+ *
+ * Essa função faz uma requisição POST para a rota "/verify-token" da API
+ * com o token do usuário.
+ *
+ * @param {string} token - Token JWT do usuário
+ * @returns Uma Promise que resolve com a resposta da API
+ * @throws Erro se a requisição falhar
+ */
+export async function verifyToken(token: string): Promise<VerifyTokenResponse> {
+  const response = await api.post<VerifyTokenResponse>("/verify-token", {
+    token,
+  });
   return response.data;
 }
