@@ -94,13 +94,6 @@ export default function SendMessage({
       usuario_id: userID,
       mensagem: data.mensagem,
     });
-
-    console.log("dados enviados:", {
-      id: ticketID,
-      admin_id: user.id,
-      usuario_id: userID,
-      mensagem: data.mensagem,
-    });
   };
 
   return (

@@ -75,7 +75,7 @@ export default function useChat(chamadoId: number, userId: number) {
           });
           break;
         default:
-          console.log("Tipo de mensagem desconhecido:", message.type);
+          console.error("Tipo de mensagem desconhecido:", message.type);
           break;
       }
     };

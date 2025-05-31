@@ -13,18 +13,15 @@ import { redirect } from "react-router";
 const verifySession = async () => {
   // Obtém o token do localStorage
   const token = localStorage.getItem("token");
-  console.log("Token obtido:", token);
 
   // Se não houver token, a sessão não é válida
   if (!token) {
-    console.log("Nenhum token encontrado, sessão inválida.");
     return { valid: false };
   }
 
   try {
     // Tenta verificar o token chamando a função verifyToken
     const data = await verifyToken(token);
-    console.log("Dados retornados da verificação do token:", data);
 
     /* 
       Se o token for válido, retorna um objeto com valid como true e as informações do usuário
@@ -37,7 +34,7 @@ const verifySession = async () => {
       return { valid: false };
     }
   } catch (error) {
-    console.error("Erro ao verificar token:", error);
+    console.error(error);
     localStorage.removeItem("token");
     return { valid: false };
   }

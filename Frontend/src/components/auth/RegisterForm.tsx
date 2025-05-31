@@ -51,7 +51,6 @@ export default function RegisterForm() {
       // Armazena o token e o usuário na sessão
       setSession(data.token, data.user);
       // Redireciona o usuário para a página inicial após o login
-      console.log("Redirecionando para '/'");
       navigate("/");
     },
     onError: (error) => {
