@@ -1,6 +1,8 @@
 import logo from "@assets/logo.png";
 import UserDropdown from "@components/user/Dropdown";
 import NavMenu from "./nav/Menu";
+import useUserInfo from "@hooks/useUserInfo";
+import { Link } from "react-router";
 
 /**
  * @description Componente de Cabeçalho (Header) para navegação.
@@ -12,6 +14,8 @@ import NavMenu from "./nav/Menu";
  * @returns {JSX.Element} O componente de Cabeçalho renderizado.
  */
 export default function Header() {
+  const user = useUserInfo();
+
   return (
     <>
       <header className="navbar h-20 py-0 fixed top-0 z-10 justify-between gap-4 bg-primary text-white border-b-1 border-neutral">
@@ -19,7 +23,12 @@ export default function Header() {
           <NavMenu />
         </div>
         <div className="flex md:flex-1 justify-center relative">
-          <img src={logo} alt="logo da neukox" className="w-28 h-28" />
+          <Link
+            to={user?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+            className="size-fit"
+          >
+            <img src={logo} alt="logo da neukox" width="100px" />
+          </Link>
         </div>
         <div className="flex flex-1 justify-end">
           <UserDropdown />
