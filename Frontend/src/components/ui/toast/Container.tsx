@@ -1,5 +1,6 @@
-import { ToastContextType, useToast } from "../../../context/ToastContext";
+import { ToastContextType, useToast } from "@context/ToastContext";
 import Toast from "./Item";
+import { createPortal } from "react-dom";
 
 /**
  * @description Componente de contêiner para exibir mensagens de toast.
@@ -13,7 +14,12 @@ import Toast from "./Item";
 export default function Container() {
   const { toasts } = useToast() as ToastContextType;
 
-  return (
+  const toastRoot =
+    typeof document !== "undefined"
+      ? document.getElementById("toast-root")
+      : null;
+
+  const content = toasts.length > 0 && (
     <div className="w-fit h-20 max-w-[30rem] toast toast-top toast-center z-50 flex flex-col overflow-hidden gap-2 p-4">
       {toasts?.map((toast) => (
         <Toast
@@ -25,4 +31,6 @@ export default function Container() {
       ))}
     </div>
   );
+
+  return toastRoot ? createPortal(content, toastRoot) : null;
 }
